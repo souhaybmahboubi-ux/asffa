@@ -475,7 +475,7 @@ export class HomeComponent {
     { feature: 'الوزن', metal: '⚖️ ثقيل نسبياً', plastic: '✅ خفيف', metalBetter: false },
     { feature: 'المخبأ السري', metal: '✅ موجود', plastic: '✅ موجود', metalBetter: false },
     { feature: 'يشيل الجوال', metal: '✅ نعم', plastic: '✅ نعم', metalBetter: false },
-    { feature: 'السعر', metal: '109 ر.س', plastic: '87 ر.س', metalBetter: false },
+    { feature: 'السعر', metal: '159.89 ر.س', plastic: '87 ر.س', metalBetter: false },
   ];
 
   getSavings(price: number, compareAtPrice: number): number {

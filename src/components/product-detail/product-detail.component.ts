@@ -81,7 +81,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
               <!-- Rating -->
               <div class="flex items-center gap-4 mb-6">
                 <div class="flex text-gold-500 text-lg">★★★★★</div>
-                <span class="text-gray-500 font-medium text-sm border-r pr-4 border-gray-200">83 تقييم</span>
+                <span class="text-gray-500 font-medium text-sm border-r pr-4 border-gray-200">{{ currentProduct.id === 'stealth-vault-insulated-tumbler' ? 113 : 83 }} تقييم</span>
               </div>
 
               <!-- Shipping Notice -->
@@ -334,7 +334,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 
           <!-- Reviews Section -->
           <div class="mt-24 border-t pt-20">
-            <app-reviews></app-reviews>
+            <app-reviews [productId]="currentProduct.id"></app-reviews>
           </div>
         }
       </div>

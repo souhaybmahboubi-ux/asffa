@@ -60,9 +60,7 @@ export class ProductService {
         'https://cdn.shopify.com/s/files/1/0649/3421/5739/files/wmremove-transformed_1.png?v=1766527136',
       ],
       variants: [
-        { name: 'فضي كلاسيك', colorCode: '#9ca3af' },
         { name: 'أسود ماتي', colorCode: '#1f2937' },
-        { name: 'ذهبي فاخر', colorCode: '#d97706' },
       ],
       bundles: [
         { id: 'mv1', title: 'حبة وحدة', quantity: 1, price: 159.89, savings: 0 },
