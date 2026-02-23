@@ -147,34 +147,52 @@ interface UIProduct {
 
                    <!-- Add to Cart Button -->
                   <div class="flex flex-col gap-6 mb-8">
-                      <!-- Quantity Selector -->
-                      <div class="flex items-center gap-4">
-                        <div class="flex items-center border-2 border-gray-200 rounded-xl h-14 bg-white overflow-hidden">
-                          <button (click)="decrementQty()" class="w-12 h-full flex items-center justify-center text-gray-500 hover:bg-gray-50 hover:text-primary-600 transition-colors font-bold">-</button>
-                          <input type="text" [value]="quantity()" readonly class="w-12 h-full text-center font-black text-gray-900 border-none focus:ring-0 p-0 text-lg">
-                          <button (click)="incrementQty()" class="w-12 h-full flex items-center justify-center text-gray-500 hover:bg-gray-50 hover:text-primary-600 transition-colors font-bold">+</button>
+                      <!-- Action Buttons -->
+                      <div class="flex flex-col gap-4">
+                        <div class="flex gap-4">
+                          <!-- Quantity Selector -->
+                          <div class="flex items-center border-2 border-gray-200 rounded-xl h-16 bg-white overflow-hidden">
+                            <button (click)="decrementQty()" class="w-12 h-full flex items-center justify-center text-gray-500 hover:bg-gray-50 hover:text-primary-600 transition-colors font-bold border-l border-gray-100">-</button>
+                            <input type="text" [value]="quantity()" readonly class="w-12 h-full text-center font-black text-gray-900 border-none focus:ring-0 p-0 text-lg">
+                            <button (click)="incrementQty()" class="w-12 h-full flex items-center justify-center text-gray-500 hover:bg-gray-50 hover:text-primary-600 transition-colors font-bold border-r border-gray-100">+</button>
+                          </div>
+
+                          <!-- Add to Cart -->
+                          <button 
+                            (click)="addToCart()"
+                            [disabled]="adding()"
+                            class="flex-1 font-bold rounded-xl h-16 flex items-center justify-center gap-2 border-2 border-gray-900 text-gray-900 hover:bg-gray-50 transition-all text-lg active:scale-95 disabled:opacity-50"
+                          >
+                            @if (addedToCart()) {
+                              <span class="flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg>
+                                تمت الإضافة
+                              </span>
+                            } @else {
+                              <span class="flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+                                أضف للسلة
+                              </span>
+                            }
+                          </button>
                         </div>
-                        <span class="text-sm font-bold text-gray-500">الكمية</span>
+
+                        <!-- Buy Now Button -->
+                        <button 
+                          (click)="buyNow()"
+                          [disabled]="adding()"
+                          class="btn-attention w-full font-bold rounded-xl h-16 flex items-center justify-center gap-3 shadow-xl transition-all text-xl overflow-hidden relative active:scale-95 bg-gray-900 hover:bg-primary-600 text-white disabled:opacity-50"
+                        >
+                          <div class="flex items-center gap-3">
+                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                             </svg>
+                             <span>
+                               🔥 شراء الآن - {{ currencyService.formatPrice(product()!.price * quantity()) }}
+                             </span>
+                          </div>
+                        </button>
                       </div>
-
-
-
-                      <!-- Buy Now Button -->
-                      <button 
-                        (click)="buyNow()"
-                        [disabled]="adding()"
-                        class="btn-attention w-full font-bold rounded-xl h-16 flex items-center justify-center gap-3 shadow-xl transition-all text-xl overflow-hidden relative active:scale-95 bg-primary-600 hover:bg-primary-700 text-white"
-                        [class.opacity-75]="adding()"
-                      >
-                        <div class="flex items-center gap-3">
-                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                           </svg>
-                           <span>
-                             🔥 شراء الآن - {{ currencyService.formatPrice(product()!.price * quantity()) }}
-                           </span>
-                        </div>
-                      </button>
                   </div>
 
                   

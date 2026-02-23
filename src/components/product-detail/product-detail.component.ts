@@ -5,7 +5,7 @@ import { ProductService, Product, ProductVariant, ProductBundle } from '../../se
 import { CartService } from '../../services/cart.service';
 import { CurrencyService } from '../../services/currency.service';
 import { ReviewsComponent } from '../reviews/reviews.component';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
@@ -222,63 +222,73 @@ import { toSignal } from '@angular/core/rxjs-interop';
                  </div>
               }
 
-              <!-- Add to Cart Button -->
-              <div class="flex flex-col gap-6 mb-6">
+              <!-- Action Buttons -->
+              <div class="flex flex-col gap-4 mb-6">
                 @if (!currentProduct.bundles || currentProduct.bundles.length === 0) {
-                  <div class="flex gap-4">
-                    <div class="flex items-center border-2 border-gray-200 rounded-xl h-16 w-32 sm:w-40 bg-white">
-                      <button (click)="decrementQty()" class="w-10 sm:w-12 h-full flex items-center justify-center text-gray-600 hover:bg-gray-50 hover:text-primary-600 rounded-r-xl text-xl sm:text-2xl transition-colors font-bold">-</button>
-                      <input type="text" [value]="quantity()" readonly class="w-full h-full text-center font-black text-gray-900 border-none focus:ring-0 p-0 text-lg sm:text-xl">
-                      <button (click)="incrementQty()" class="w-10 sm:w-12 h-full flex items-center justify-center text-gray-600 hover:bg-gray-50 hover:text-primary-600 rounded-l-xl text-xl sm:text-2xl transition-colors font-bold">+</button>
+                  <div class="flex flex-col gap-4">
+                    <div class="flex gap-4">
+                      <!-- Quantity Selector -->
+                      <div class="flex items-center border-2 border-gray-200 rounded-xl h-16 w-32 sm:w-40 bg-white">
+                        <button (click)="decrementQty()" class="w-10 sm:w-12 h-full flex items-center justify-center text-gray-600 hover:bg-gray-50 hover:text-primary-600 rounded-r-xl text-xl sm:text-2xl transition-colors font-bold border-l border-gray-100">-</button>
+                        <input type="text" [value]="quantity()" readonly class="w-full h-full text-center font-black text-gray-900 border-none focus:ring-0 p-0 text-lg sm:text-xl">
+                        <button (click)="incrementQty()" class="w-10 sm:w-12 h-full flex items-center justify-center text-gray-600 hover:bg-gray-50 hover:text-primary-600 rounded-l-xl text-xl sm:text-2xl transition-colors font-bold border-r border-gray-100">+</button>
+                      </div>
+
+                      <!-- Add to Cart -->
+                      <button 
+                        (click)="addToCart()"
+                        class="flex-1 font-bold rounded-xl h-16 flex items-center justify-center gap-2 border-2 border-gray-900 text-gray-900 hover:bg-gray-50 transition-all text-base sm:text-lg active:scale-95"
+                      >
+                         @if (addedToCart()) {
+                           <span class="flex items-center gap-2">
+                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg>
+                             تمت الإضافة!
+                           </span>
+                         } @else {
+                           <span class="flex items-center gap-2">
+                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+                             أضف للسلة
+                           </span>
+                         }
+                      </button>
                     </div>
-                                        <button 
-                      (click)="addToCart()"
-                      class="btn-attention flex-1 font-bold rounded-xl h-16 flex items-center justify-center gap-2 shadow-xl transition-all text-base sm:text-lg md:text-xl overflow-hidden relative active:scale-95"
-                      [class.bg-green-600]="addedToCart()"
-                      [class.hover:bg-green-700]="addedToCart()"
-                      [class.bg-gray-900]="!addedToCart()"
-                      [class.hover:bg-primary-600]="!addedToCart()"
-                      [class.text-white]="true"
+
+                    <!-- Buy Now -->
+                    <button 
+                      (click)="buyNow()"
+                      class="btn-attention w-full font-bold rounded-xl h-16 flex items-center justify-center gap-2 shadow-xl transition-all text-base sm:text-lg md:text-xl overflow-hidden relative active:scale-95 bg-gray-900 hover:bg-primary-600 text-white"
                     >
-                       @if (addedToCart()) {
-                         <div class="flex items-center gap-2 animate-in fade-in zoom-in duration-300">
-                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 sm:h-8 sm:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                             </svg>
-                             <span>تمت الإضافة!</span>
-                          </div>
-                       } @else {
-                         <span class="flex items-center gap-2">🔥 شراء الآن</span>
-                       }
+                      <span class="flex items-center gap-2">🔥 شراء الآن</span>
                     </button>
                   </div>
                 } @else {
+                  <div class="flex flex-col gap-4">
+                    <!-- Add to Cart (Bundles) -->
+                    <button 
+                      (click)="addToCart()"
+                      class="w-full font-bold rounded-xl h-16 flex items-center justify-center gap-2 border-2 border-gray-900 text-gray-900 hover:bg-gray-50 transition-all text-base sm:text-lg active:scale-95"
+                    >
+                      @if (addedToCart()) {
+                         <span class="flex items-center gap-2">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg>
+                           تمت الإضافة بنجاح!
+                         </span>
+                      } @else {
+                        <span class="flex items-center gap-2">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+                          أضف للسلة - {{ currencyService.formatPrice(selectedBundle()?.price || currentProduct.price) }}
+                        </span>
+                      }
+                    </button>
 
-                   <button 
-                    (click)="addToCart()"
-                    class="btn-attention w-full font-bold rounded-xl h-16 flex items-center justify-center gap-2 shadow-xl transition-all text-base sm:text-lg md:text-xl overflow-hidden relative active:scale-95"
-                    [class.bg-green-600]="addedToCart()"
-                    [class.hover:bg-green-700]="addedToCart()"
-                    [class.bg-gray-900]="!addedToCart()"
-                    [class.hover:bg-primary-600]="!addedToCart()"
-                    [class.text-white]="true"
-                  >
-                    @if (addedToCart()) {
-                      <div class="flex items-center gap-2 animate-in fade-in zoom-in duration-300">
-                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 sm:h-8 sm:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                         </svg>
-                         <span>تمت الإضافة بنجاح!</span>
-                      </div>
-                    } @else {
-                      <div class="flex items-center gap-2 px-2 overflow-hidden">
-                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 sm:h-7 sm:w-7 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                         </svg>
-                         <span class="truncate">🔥 شراء الآن - {{ currencyService.formatPrice(selectedBundle()?.price || currentProduct.price) }}</span>
-                      </div>
-                    }
-                  </button>
+                    <!-- Buy Now (Bundles) -->
+                    <button 
+                      (click)="buyNow()"
+                      class="btn-attention w-full font-bold rounded-xl h-16 flex items-center justify-center gap-2 shadow-xl transition-all text-base sm:text-lg md:text-xl overflow-hidden relative active:scale-95 bg-gray-900 hover:bg-primary-600 text-white"
+                    >
+                      <span class="flex items-center gap-2">🔥 شراء الآن - {{ currencyService.formatPrice(selectedBundle()?.price || currentProduct.price) }}</span>
+                    </button>
+                  </div>
                 }
               </div>
 
@@ -360,6 +370,7 @@ export class ProductDetailComponent {
   private cartService = inject(CartService);
   currencyService = inject(CurrencyService);
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
   @ViewChild('mainImageContainer') mainImageContainer!: ElementRef<HTMLElement>;
 
@@ -477,6 +488,12 @@ export class ProductDetailComponent {
         this.addedToCart.set(false);
       }, 2000);
     }
+  }
+
+  buyNow() {
+    this.addToCart();
+    // Redirect to checkout
+    this.router.navigate(['/checkout']);
   }
 
   getDiscountPercentage() {
