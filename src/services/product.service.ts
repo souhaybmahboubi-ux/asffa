@@ -38,7 +38,7 @@ export class ProductService {
     {
       id: 'stealth-vault-insulated-tumbler',
       title: 'ترمس ستيلث فولت™ — الذهب المعدني',
-      price: 159.89,
+      price: 129.89,
       compareAtPrice: 249.00,
       isAntiDetection: true,
       badge: '🛡️ مضاد للكشف',
@@ -54,7 +54,7 @@ export class ProductService {
         '🎭 تصميم بريء: يبدو ترمس عادي من الخارج، سر كامل من الداخل.'
       ],
       images: [
-        'https://cdn.shopify.com/s/files/1/0649/3421/5739/files/wmremove-transformed.png?v=1766527136',
+        '/assets/products/metal-bottle.png',
         'https://cdn.shopify.com/s/files/1/0649/3421/5739/files/Gemini_Generated_Image_zbpzyfzbpzyfzbpz.png?v=1766527136',
         'https://cdn.shopify.com/s/files/1/0649/3421/5739/files/image_6.png?v=1766527136',
         'https://cdn.shopify.com/s/files/1/0649/3421/5739/files/wmremove-transformed_1.png?v=1766527136',
@@ -63,7 +63,7 @@ export class ProductService {
         { name: 'أسود ماتي', colorCode: '#1f2937' },
       ],
       bundles: [
-        { id: 'mv1', title: 'حبة وحدة', quantity: 1, price: 159.89, savings: 0 },
+        { id: 'mv1', title: 'حبة وحدة', quantity: 1, price: 129.89, savings: 0 },
         { id: 'mv2', title: 'عرض الاثنين', quantity: 2, price: 299.00, savings: 20.78, isBestValue: true },
         { id: 'mv3', title: 'عرض الشلة (3 حبات)', quantity: 3, price: 429.00, savings: 50.67 }
       ]

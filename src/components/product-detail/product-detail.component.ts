@@ -42,10 +42,9 @@ import { toSignal } from '@angular/core/rxjs-interop';
                   @for (img of currentProduct.images; track img; let i = $index) {
                     <div class="min-w-full h-full snap-center flex items-center justify-center relative bg-white">
                       <img 
-                        [ngSrc]="img" 
+                        [src]="img" 
                         width="800"
                         height="800"
-                        [priority]="i === 0"
                         class="object-contain w-full h-full p-8"
                         [alt]="currentProduct.title"
                       >

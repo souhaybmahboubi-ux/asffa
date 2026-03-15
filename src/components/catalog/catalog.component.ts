@@ -24,9 +24,8 @@ import { CurrencyService } from '../../services/currency.service';
             <a [routerLink]="['/product', product.id]" class="group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100">
               <div class="aspect-[4/3] bg-gray-100 relative overflow-hidden">
                 <img 
-                  [ngSrc]="product.images[0]" 
-                  fill 
-                  class="object-cover group-hover:scale-105 transition-transform duration-700" 
+                  [src]="product.images[0]" 
+                  class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700" 
                   [alt]="product.title"
                 >
                 @if (product.compareAtPrice > product.price) {

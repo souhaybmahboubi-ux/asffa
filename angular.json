@@ -19,6 +19,11 @@
             "browser": "index.tsx",
             "tsConfig": "tsconfig.json",
             "assets": [
+              {
+                "glob": "**/*",
+                "input": "src/assets",
+                "output": "/assets"
+              },
               "_redirects",
               "netlify.toml"
             ]

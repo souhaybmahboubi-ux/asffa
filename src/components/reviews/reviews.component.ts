@@ -53,7 +53,7 @@ import { PLASTIC_REVIEWS } from '../../app/data/plastic-reviews';
                  <div class="flex gap-2 mt-4 overflow-x-auto pb-2 scrollbar-hide">
                     @for (img of review.images; track img) {
                       <div class="w-16 h-16 rounded-lg overflow-hidden border border-gray-200 flex-shrink-0 cursor-pointer hover:opacity-90 transition-opacity">
-                         <img [ngSrc]="img" width="100" height="100" class="w-full h-full object-cover">
+                         <img [src]="img" class="w-full h-full object-cover">
                       </div>
                     }
                  </div>

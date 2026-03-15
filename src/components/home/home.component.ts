@@ -33,145 +33,162 @@ import { NgOptimizedImage, CommonModule } from '@angular/common';
           </p>
         </div>
 
-        <!-- ─── DUAL PRODUCT CARDS ─── -->
-        <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <!-- ─── DUAL PRODUCT CARDS (Redesigned for optimal conversion) ─── -->
+        <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 max-w-6xl mx-auto items-stretch mt-8 relative">
+          
+          <!-- VS Badge in middle of cards on desktop -->
+          <div class="hidden lg:flex absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full items-center justify-center font-black text-gray-400 shadow-xl border border-gray-100 z-20">
+            VS
+          </div>
 
-          <!-- CARD 1 — Metal (Anti-Detection) — Premier -->
-          <div class="relative group">
-            <!-- Glow border -->
-            <div class="absolute -inset-1 bg-gradient-to-br from-gray-800 via-gray-600 to-amber-500 rounded-3xl blur-sm opacity-60 group-hover:opacity-100 transition-opacity duration-500"></div>
-            <div class="relative bg-gray-950 rounded-3xl overflow-hidden p-8 h-full flex flex-col">
-
-              <!-- Anti-Detection Badge -->
+          <!-- CARD 2 — Plastic (Standard) — Economic Alternative -->
+          <div class="relative group order-2 lg:order-1 mt-0 lg:mt-6">
+            <div class="relative bg-white rounded-3xl overflow-hidden p-8 h-full flex flex-col border-2 border-gray-100/80 shadow-md transition-all duration-300 hover:border-gray-200 hover:shadow-lg">
+              
+              <!-- Badge -->
               <div class="flex items-center justify-between mb-4">
-                <span class="inline-flex items-center gap-1.5 bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-black px-3 py-1.5 rounded-full">
-                  <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
-                  مضاد للكشف — ستانلس ستيل
+                <span class="inline-flex items-center gap-1.5 bg-gray-100 border border-gray-200 text-gray-700 text-xs font-black px-3 py-1.5 rounded-full">
+                  💧 الخيار الاقتصادي (بلاستيك)
                 </span>
-                <span class="text-xs font-bold bg-red-500/20 border border-red-500/30 text-red-400 px-2 py-1 rounded-full">الأفضل</span>
               </div>
 
               <!-- Image -->
-              <div class="relative flex-1 flex items-center justify-center py-4 min-h-[220px]">
-                <div class="absolute inset-0 bg-gradient-to-b from-gray-800/20 to-transparent rounded-2xl"></div>
+              <div class="relative flex-1 flex items-center justify-center py-4 min-h-[200px] bg-gray-50/50 rounded-2xl mb-6 border border-gray-50">
                 <img
-                  [ngSrc]="metalProduct.images[0]"
-                  width="300"
-                  height="300"
-                  priority
-                  alt="Stealth Vault Tumbler"
-                  class="object-contain max-h-[240px] drop-shadow-[0_20px_40px_rgba(0,0,0,0.6)] group-hover:scale-105 transition-transform duration-500 relative z-10"
+                  [src]="plasticProduct.images[0]"
+                  width="250"
+                  height="250"
+                  alt="StealthHydrate Bottle"
+                  class="object-contain max-h-[220px] drop-shadow-md group-hover:scale-105 transition-transform duration-500"
                 >
-                <!-- Detection blocked badge -->
-                <div class="absolute bottom-2 right-2 bg-green-500/20 border border-green-500/30 backdrop-blur-sm px-3 py-1.5 rounded-xl z-20">
-                  <div class="flex items-center gap-1.5">
-                    <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                    <span class="text-green-300 text-[10px] font-black">كاشفات الجوال ما تشوفه</span>
-                  </div>
-                </div>
               </div>
 
               <!-- Info -->
-              <div class="mt-6">
-                <h2 class="text-2xl font-black text-white mb-2">{{ metalProduct.title }}</h2>
-                <p class="text-gray-400 text-sm leading-relaxed mb-4 line-clamp-3">
-                  الهيكل المعدني يحجب أجهزة الكشف تمامًا. لا أحد يرى ما بداخله — لا في المدرسة، لا في المطار!
+              <div class="flex-1">
+                <h2 class="text-2xl font-black text-gray-900 mb-2">{{ plasticProduct.title }}</h2>
+                <p class="text-gray-500 text-sm leading-relaxed mb-4 font-medium">
+                  مطارة ممتازة بمخبأ سري، خفيفة وعملية. تناسب الأماكن اللي مافيها تفتيش شديد للشنط.
                 </p>
                 <!-- Key perks -->
-                <div class="space-y-2 mb-6">
-                  <div class="flex items-center gap-2 text-gray-300 text-xs">
-                    <svg class="w-4 h-4 text-amber-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                    <span>جهاز الكشف؟ ما يشوف شيء — مضمون 100%</span>
+                <div class="space-y-3 mb-6">
+                  <div class="flex items-center gap-3 text-gray-600 text-sm font-medium">
+                    <span class="text-green-500 font-bold bg-green-50 px-1.5 py-0.5 rounded shrink-0">✓</span>
+                    <span>يشيل آيفون 17 برو ماكس بـ راحة</span>
                   </div>
-                  <div class="flex items-center gap-2 text-gray-300 text-xs">
-                    <svg class="w-4 h-4 text-amber-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                    <span>بارد 24 ساعة / ساخن 12 ساعة</span>
+                  <div class="flex items-center gap-3 text-gray-600 text-sm font-medium">
+                    <span class="text-green-500 font-bold bg-green-50 px-1.5 py-0.5 rounded shrink-0">✓</span>
+                    <span>خفيف الوزن ومناسب للنادي والمشاوير</span>
                   </div>
-                  <div class="flex items-center gap-2 text-gray-300 text-xs">
-                    <svg class="w-4 h-4 text-amber-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                    <span>ستانلس ستيل فاخر — لا يصدأ أبدًا</span>
+                  <div class="flex items-start gap-3 text-orange-600 text-sm font-bold bg-orange-50 p-2.5 rounded-xl border border-orange-100/50">
+                    <span class="mt-0.5 shrink-0">⚠️</span>
+                    <span class="leading-relaxed">تنبيه: البلاستيك شفاف بجهاز كشف المعادن أو حقائب المدرسة، قد يظهر الجوال بداخله.</span>
                   </div>
                 </div>
-                <!-- Price + CTA -->
+              </div>
+              
+              <!-- Price + CTA -->
+              <div class="mt-auto pt-6 border-t border-gray-100">
                 <div class="flex items-end justify-between mb-4">
-                  <div>
-                    <span class="text-2xl font-black text-white">{{ currencyService.formatPrice(metalProduct.price) }}</span>
-                    <span class="text-xs text-gray-500 line-through mr-2">{{ currencyService.formatPrice(metalProduct.compareAtPrice) }}</span>
+                  <div class="flex flex-col">
+                    <span class="text-xs text-gray-400 font-medium mb-1">السعر الأساسي</span>
+                    <div class="flex items-center gap-2">
+                       <span class="text-3xl font-black text-gray-900">{{ currencyService.formatPrice(plasticProduct.price) }}</span>
+                    </div>
                   </div>
-                  <span class="text-xs font-bold text-amber-400 bg-amber-400/10 border border-amber-400/20 px-2 py-1 rounded-lg">وفر {{ getSavings(metalProduct.price, metalProduct.compareAtPrice) }}%</span>
                 </div>
-                <a [routerLink]="['/product', metalProduct.id]"
-                   class="block w-full text-center bg-gradient-to-r from-gray-700 to-amber-600 hover:from-gray-600 hover:to-amber-500 text-white font-black py-4 rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-amber-500/30 text-base">
-                  🛡️ اطلب الترمس المعدني
+                <a [routerLink]="['/product', plasticProduct.id]"
+                   class="block w-full text-center bg-white border-2 border-gray-300 text-gray-700 hover:border-gray-900 hover:text-gray-900 font-black py-3.5 rounded-2xl transition-all text-sm hover:bg-gray-50 active:scale-95">
+                  عرض تفاصيل البلاستيك
                 </a>
               </div>
             </div>
           </div>
 
-          <!-- CARD 2 — Plastic (Standard) -->
-          <div class="relative group">
-            <div class="absolute -inset-1 bg-gradient-to-br from-primary-400 via-primary-500 to-blue-500 rounded-3xl blur-sm opacity-40 group-hover:opacity-80 transition-opacity duration-500"></div>
-            <div class="relative bg-white rounded-3xl overflow-hidden p-8 h-full flex flex-col border border-gray-100 shadow-xl">
+          <!-- CARD 1 — Metal (Anti-Detection) — The Best Seller / Pro Option -->
+          <div class="relative group order-1 lg:order-2 z-10 lg:-mt-4">
+            <!-- Glow background emitting outwards -->
+            <div class="absolute -inset-2 lg:-inset-3 bg-gradient-to-br from-amber-400 via-yellow-500 to-amber-600 rounded-[2.5rem] blur-xl opacity-50 group-hover:opacity-100 transition-opacity duration-700 animate-pulse"></div>
+            
+            <div class="relative bg-gray-950 rounded-3xl overflow-hidden p-8 lg:p-10 h-full flex flex-col border border-gray-800 shadow-[0_0_50px_rgba(251,191,36,0.15)] lg:scale-[1.03]">
+              <!-- Best Seller Ribbon -->
+              <div class="absolute top-0 right-0 overflow-hidden w-32 h-32 rounded-tr-3xl pointer-events-none">
+                <div class="absolute top-0 right-0 bg-gradient-to-r from-red-600 to-red-500 text-white font-black text-[11px] px-12 py-1.5 translate-x-[25%] translate-y-[80%] rotate-45 shadow-lg w-[170px] text-center border-b border-white/20 tracking-wider">
+                  الأكثر مبيعاً 🔥
+                </div>
+              </div>
 
-              <!-- Badge -->
-              <div class="flex items-center justify-between mb-4">
-                <span class="inline-flex items-center gap-1.5 bg-primary-100 border border-primary-200 text-primary-700 text-xs font-black px-3 py-1.5 rounded-full">
-                  💧 مطارة بلاستيك خفيفة
+              <!-- Anti-Detection Badge -->
+              <div class="flex flex-wrap items-center gap-2 mb-6 pr-4 relative z-10">
+                <span class="inline-flex items-center gap-1 bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-black px-3 py-1.5 rounded-full">
+                  <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+                  أمان مطلق — المعدن الصلب
                 </span>
-                <span class="text-xs font-bold bg-green-50 border border-green-200 text-green-600 px-2 py-1 rounded-full">الأرخص</span>
               </div>
 
               <!-- Image -->
-              <div class="relative flex-1 flex items-center justify-center py-4 min-h-[220px]">
-                <div class="absolute inset-0 bg-gradient-to-b from-primary-50/50 to-transparent rounded-2xl"></div>
+              <div class="relative flex-1 flex items-center justify-center py-6 min-h-[240px] bg-gradient-to-b from-gray-800/40 to-transparent rounded-2xl mb-6 border border-gray-800/50 group-hover:border-amber-500/20 transition-colors">
                 <img
-                  [ngSrc]="plasticProduct.images[0]"
+                  [src]="metalProduct.images[0]"
                   width="300"
                   height="300"
-                  priority
-                  alt="StealthHydrate Bottle"
-                  class="object-contain max-h-[240px] drop-shadow-xl group-hover:scale-105 transition-transform duration-500 relative z-10"
+                  alt="Stealth Vault Tumbler"
+                  class="object-contain max-h-[260px] drop-shadow-[0_20px_40px_rgba(251,191,36,0.15)] group-hover:scale-110 transition-transform duration-500 relative z-10"
                 >
-                <!-- Note badge -->
-                <div class="absolute bottom-2 right-2 bg-orange-100 border border-orange-200 px-3 py-1.5 rounded-xl z-20">
-                  <div class="flex items-center gap-1.5">
-                    <span class="text-orange-500 text-[10px] font-black">⚠️ الكاشف قد يرى الجوال</span>
+                <!-- Detection blocked badge -->
+                <div class="absolute bottom-3 right-3 bg-green-500/10 border border-green-500/30 backdrop-blur-md px-4 py-2 rounded-xl z-20 shadow-xl pointer-events-none">
+                  <div class="flex items-center gap-2">
+                    <span class="text-3xl drop-shadow-lg">🚫📡</span>
+                    <div class="flex flex-col">
+                      <span class="text-green-300 text-xs font-black uppercase tracking-wider">مضاد للكشف تماماً</span>
+                      <span class="text-gray-300 text-[10px] font-medium">أجهزة المدارس ما تشوفه</span>
+                    </div>
                   </div>
                 </div>
               </div>
 
               <!-- Info -->
-              <div class="mt-6">
-                <h2 class="text-2xl font-black text-gray-900 mb-2">{{ plasticProduct.title }}</h2>
-                <p class="text-gray-500 text-sm leading-relaxed mb-4 line-clamp-3">
-                  مطارة ذكية خفيفة بمخبأ سري تحت. مثالية للمدرسة، النادي، والسفر. لكن انتبه — البلاستيك قد يكشف محتوى الجوال!
-                </p>
+              <div class="flex-1 mt-2">
+                <h2 class="text-3xl md:text-4xl font-black text-white mb-3">{{ metalProduct.title }}</h2>
+                <div class="text-gray-400 text-[15px] leading-relaxed mb-6 font-medium">
+                  ليش تاخذ البلاستيك وتخاف من التفتيش؟
+                  <span class="text-amber-400 font-bold bg-amber-400/10 px-1.5 rounded mx-1">بزيادة {{ (metalProduct.price - plasticProduct.price) | number:'1.0-2' }} ريال فقط</span>
+                  احصل على الخيار الاحترافي اللي يحجب أجهزة الكشف 100% ويحفظ البرودة ليوم كامل!
+                </div>
                 <!-- Key perks -->
-                <div class="space-y-2 mb-6">
-                  <div class="flex items-center gap-2 text-gray-600 text-xs">
-                    <svg class="w-4 h-4 text-primary-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    <span>يشيل آيفون 17 برو ماكس راحة</span>
+                <div class="space-y-3 mb-8">
+                  <div class="flex items-center gap-3 text-gray-200 text-sm bg-gray-900/50 p-3 rounded-xl border border-gray-800 hover:border-amber-500/30 transition-colors">
+                    <div class="w-7 h-7 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 shrink-0 font-bold">✓</div>
+                    <span class="font-bold">يحجب إشارات أجهزة التفتيش تماماً (مضمون 100%)</span>
                   </div>
-                  <div class="flex items-center gap-2 text-gray-600 text-xs">
-                    <svg class="w-4 h-4 text-primary-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m8.66-10h-1M4.34 12h-1m15.07-6.07l-.71.71M6.34 17.66l-.71.71M17.66 17.66l-.71-.71M6.34 6.34l-.71-.71"/></svg>
-                    <span>ألوان متعددة — خفيف وعصري</span>
+                  <div class="flex items-center gap-3 text-gray-200 text-sm bg-gray-900/50 p-3 rounded-xl border border-gray-800 hover:border-amber-500/30 transition-colors">
+                    <div class="w-7 h-7 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 shrink-0 font-bold">✓</div>
+                    <span class="font-bold">عزل حراري دبل: بارد 24 ساعة / حار 12 ساعة</span>
                   </div>
-                  <div class="flex items-center gap-2 text-orange-500 text-xs font-bold">
-                    <svg class="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    <span>البلاستيك شفاف للكاشفات — للأماكن بدون تفتيش شديد</span>
+                  <div class="flex items-center gap-3 text-gray-200 text-sm bg-gray-900/50 p-3 rounded-xl border border-gray-800 hover:border-amber-500/30 transition-colors">
+                    <div class="w-7 h-7 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-400 shrink-0 font-bold">✓</div>
+                    <span class="font-bold">جودة فاخرة (ستانلس ستيل 304) ضد الصدأ والصدمات</span>
                   </div>
                 </div>
-                <!-- Price + CTA -->
-                <div class="flex items-end justify-between mb-4">
-                  <div>
-                    <span class="text-2xl font-black text-gray-900">{{ currencyService.formatPrice(plasticProduct.price) }}</span>
-                    <span class="text-xs text-gray-400 line-through mr-2">{{ currencyService.formatPrice(plasticProduct.compareAtPrice) }}</span>
+              </div>
+
+              <!-- Price + CTA -->
+              <div class="mt-auto pt-6 border-t border-gray-800">
+                <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-5 gap-3">
+                  <div class="flex flex-col">
+                    <span class="inline-flex text-[10px] text-amber-900 bg-amber-400 font-black px-2 py-0.5 rounded-sm w-fit mb-1 border border-amber-300">أفضل قيمة مقابل السعر</span>
+                    <div class="flex items-center gap-3">
+                      <span class="text-4xl font-black text-white">{{ currencyService.formatPrice(metalProduct.price) }}</span>
+                      <span class="text-sm text-gray-500 line-through">{{ currencyService.formatPrice(metalProduct.compareAtPrice) }}</span>
+                    </div>
                   </div>
-                  <span class="text-xs font-bold text-green-600 bg-green-50 border border-green-200 px-2 py-1 rounded-lg">وفر {{ getSavings(plasticProduct.price, plasticProduct.compareAtPrice) }}%</span>
+                   <span class="text-[11px] font-bold text-green-400 border border-green-500/30 bg-green-500/10 px-2 py-1 rounded-lg w-fit">
+                    وفر {{ getSavings(metalProduct.price, metalProduct.compareAtPrice) }}%
+                   </span>
                 </div>
-                <a [routerLink]="['/product', plasticProduct.id]"
-                   class="block w-full text-center bg-gray-900 hover:bg-primary-600 text-white font-black py-4 rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-xl text-base">
-                  💧 اطلب المطارة البلاستيك
+                <a [routerLink]="['/product', metalProduct.id]"
+                   class="flex flex-col items-center justify-center w-full bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-black py-4 rounded-xl transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_30px_rgba(251,191,36,0.3)] relative overflow-hidden group/btn active:scale-95">
+                  <span class="text-lg relative z-10 flex items-center gap-2">🛡️ اطلب ترمس الستانلس ستيل</span>
+                  <span class="text-[11px] font-bold opacity-80 mt-1 relative z-10">خيار الأغلبية (أكثر من 85% من العملاء اختاروه)</span>
                 </a>
               </div>
             </div>
@@ -292,7 +309,7 @@ import { NgOptimizedImage, CommonModule } from '@angular/common';
               <!-- Bottle -->
               <div class="w-52 h-52 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center shadow-2xl">
                 <img
-                  [ngSrc]="metalProduct.images[0]"
+                  [src]="metalProduct.images[0]"
                   width="160"
                   height="160"
                   alt="Metal Anti-Detection Bottle"
@@ -414,14 +431,16 @@ import { NgOptimizedImage, CommonModule } from '@angular/common';
           لا تضيع الفرصة..<br/>
           خلك كشخة وآمن!
         </h2>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-stretch max-w-2xl mx-auto">
           <a [routerLink]="['/product', metalProduct.id]"
-             class="w-full sm:w-auto bg-amber-500 hover:bg-amber-400 text-black text-lg font-black px-10 py-5 rounded-2xl shadow-2xl hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2">
-            🛡️ الترمس المعدني
+             class="flex-1 bg-gradient-to-r from-amber-400 via-amber-500 to-yellow-500 hover:from-amber-300 hover:to-amber-400 text-black text-xl font-black px-8 py-5 rounded-2xl shadow-[0_0_40px_rgba(245,158,11,0.5)] transform hover:scale-110 transition-all duration-300 flex flex-col items-center justify-center gap-1 group">
+            <span class="flex items-center gap-2 drop-shadow-sm">🛡️ اطلب ترمس ستيلث فولت</span>
+            <span class="text-[11px] font-bold opacity-80">(أنقذ جوالك 100%)</span>
           </a>
           <a [routerLink]="['/product', plasticProduct.id]"
-             class="w-full sm:w-auto bg-gray-900 text-white text-lg font-bold px-10 py-5 rounded-2xl shadow-xl hover:scale-105 hover:bg-black transition-all duration-300 flex items-center justify-center gap-2">
-            💧 المطارة البلاستيك
+             class="sm:w-1/3 bg-gray-800 text-gray-300 text-sm font-bold px-6 py-5 rounded-2xl shadow-xl hover:scale-105 hover:bg-gray-900 transition-all duration-300 flex flex-col items-center justify-center gap-1 border border-gray-700">
+            <span class="flex items-center gap-2">💧 البلاستيك العادي</span>
+            <span class="text-[9px] text-gray-400">(اقتصادي)</span>
           </a>
         </div>
         <div class="mt-6 flex items-center justify-center gap-2 text-white/80 font-medium text-sm">
@@ -469,13 +488,11 @@ export class HomeComponent {
   plasticProduct = this.productService.getProduct('stealthhydrate™-water-bottle-with-hidden-safe')!;
 
   comparisonRows = [
-    { feature: 'يحجب أجهزة الكشف', metal: '✅ نعم — 100%', plastic: '❌ لا', metalBetter: true },
-    { feature: 'المادة', metal: '🔩 ستانلس ستيل', plastic: '💧 بلاستيك', metalBetter: true },
-    { feature: 'العزل الحراري', metal: '❄️ 24 ساعة بارد', plastic: '🌡️ بدون', metalBetter: true },
-    { feature: 'الوزن', metal: '⚖️ ثقيل نسبياً', plastic: '✅ خفيف', metalBetter: false },
-    { feature: 'المخبأ السري', metal: '✅ موجود', plastic: '✅ موجود', metalBetter: false },
-    { feature: 'يشيل الجوال', metal: '✅ نعم', plastic: '✅ نعم', metalBetter: false },
-    { feature: 'السعر', metal: '159.89 ر.س', plastic: '87 ر.س', metalBetter: false },
+    { feature: 'نسبة الأمان للتفتيش', metal: '🛡️ أمان 100% (المعدن يحجب الأشعة)', plastic: '⚠️ ضعيف (البلاستيك شفاف للأشعة)', metalBetter: true },
+    { feature: 'المادة والمتانة', metal: '🔩 ستانلس ستيل قوي (متطور)', plastic: '💧 بلاستيك (خفيف ועادي)', metalBetter: true },
+    { feature: 'العزل الحراري', metal: '❄️ ممتاز (بارد 24 ساعة، مقفل بإحكام)', plastic: '❌ لا يوجد (يحر بسرعة)', metalBetter: true },
+    { feature: 'حجم المخبأ السري', metal: '📱 يتسع لأكبر الجوالات والفيب وغيرها', plastic: '📱 يتسع لأكبر الجوالات بسهولة', metalBetter: false },
+    { feature: 'تقييم القيمة مقابل السعر', metal: '129.89 ر.س (الأكثر توفيراً لجودته 🔥)', plastic: '86.99 ر.س (الخيار الاقتصادي)', metalBetter: false },
   ];
 
   getSavings(price: number, compareAtPrice: number): number {
