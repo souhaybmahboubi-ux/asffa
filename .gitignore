@@ -36,5 +36,8 @@ lerna-debug.log*
 # Scratch/temp files
 scratch/
 
+# Data exports
+*.csv
+
 # OS files
 Thumbs.db

@@ -24,7 +24,6 @@
                 "input": "src/assets",
                 "output": "/assets"
               },
-              "_redirects",
               "netlify.toml"
             ]
           },
