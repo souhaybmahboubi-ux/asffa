@@ -20,7 +20,7 @@ export class AuthService {
 
   constructor() {
     // Load from local storage on init
-    const savedUser = localStorage.getItem('noreva_user');
+    const savedUser = localStorage.getItem('kypostore_user');
     if (savedUser) {
       try {
         const user = JSON.parse(savedUser);
@@ -35,13 +35,13 @@ export class AuthService {
   login(user: UserProfile) {
     this.currentUser.set(user);
     this.isLoggedIn.set(true);
-    localStorage.setItem('noreva_user', JSON.stringify(user));
+    localStorage.setItem('kypostore_user', JSON.stringify(user));
   }
 
   logout() {
     this.currentUser.set(null);
     this.isLoggedIn.set(false);
-    localStorage.removeItem('noreva_user');
+    localStorage.removeItem('kypostore_user');
   }
 
   updateProfile(user: UserProfile) {

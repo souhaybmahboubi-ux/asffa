@@ -5,10 +5,9 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { ShopifyService } from '../../services/shopify.service';
 import { CurrencyService } from '../../services/currency.service';
+import { TranslationService } from '../../services/translation.service';
 import { ReviewsComponent } from '../reviews/reviews.component';
 
-// Interfaces adapted to match the template's expectations but driven by Shopify Data
-// Interfaces
 interface UIProductVariant {
   id: string;
   name: string;
@@ -23,6 +22,7 @@ interface UIProductBundle {
   quantity: number;
   price: number;
   savings: number;
+  savePercent: number;
   isBestValue?: boolean;
 }
 
@@ -36,7 +36,7 @@ interface UIProduct {
   features: string[];
   images: string[];
   variants: UIProductVariant[];
-  bundles: UIProductBundle[]; // Re-enabled
+  bundles: UIProductBundle[];
 }
 
 @Component({
@@ -46,94 +46,178 @@ interface UIProduct {
   template: `
     <div class="bg-white min-h-screen pb-20">
       
-      <!-- Loading State -->
       @if (loading()) {
         <div class="min-h-screen flex items-center justify-center pt-20">
-           <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-primary-600"></div>
+           <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-black"></div>
         </div>
       }
 
-      <!-- Error State -->
       @if (error()) {
         <div class="min-h-screen flex flex-col items-center justify-center pt-20 text-center px-4">
-           <h2 class="text-2xl font-bold text-red-600 mb-2">Error Loading Product</h2>
-           <p class="text-gray-600 mb-6">{{ error() }}</p>
-           <button routerLink="/products" class="bg-gray-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-gray-800 transition">Go Back to Catalog</button>
+           <h2 class="text-2xl font-bold text-red-500 mb-2">Error Loading Product</h2>
+           <p class="text-gray-500 mb-6">{{ error() }}</p>
+           <button routerLink="/products" class="bg-black text-white px-6 py-3 rounded-xl font-bold hover:bg-gray-800 transition">Go Back to Catalog</button>
         </div>
       }
 
-      <!-- Product Content -->
       @if (!loading() && !error() && product(); as currentProduct) {
-          <div class="container mx-auto px-4 pt-40 pb-8">
+          <div class="container mx-auto px-4 pt-28 md:pt-40 pb-8">
             
-            <!-- Breadcrumbs -->
             <nav class="flex text-sm text-gray-500 mb-8" aria-label="Breadcrumb">
               <ol class="inline-flex items-center space-x-1 space-x-reverse md:space-x-3">
-                <li><a routerLink="/" class="hover:text-primary-600 transition-colors">الرئيسية</a></li>
+                <li><a routerLink="/" class="hover:text-black transition-colors">{{ ts.t('home') }}</a></li>
                 <li>/</li>
-                <li><a routerLink="/products" class="hover:text-primary-600 transition-colors">المنتجات</a></li>
+                <li><a routerLink="/products" class="hover:text-black transition-colors">{{ ts.t('products') }}</a></li>
                 <li>/</li>
-                <li class="text-primary-600 font-medium" aria-current="page">{{ currentProduct.title }}</li>
+                <li class="text-black font-medium" aria-current="page">{{ currentProduct.title }}</li>
               </ol>
             </nav>
 
-            <!-- Main Grid with Reversed Order for RTL on Desktop -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
                 
-                <!-- Product Info (Visual Right in RTL) -->
+                <!-- Product Info -->
                 <div class="order-2 lg:order-last">
-                  <h1 class="text-4xl md:text-5xl font-black text-gray-900 mb-6 leading-tight">{{ currentProduct.title }}</h1>
+                  <h1 class="text-4xl md:text-5xl font-black text-black mb-6 leading-tight">{{ currentProduct.title }}</h1>
                   
-                  <!-- Rating -->
-                  <div class="flex items-center gap-4 mb-6">
-                    <div class="flex text-yellow-500 text-lg">★★★★★</div>
-                    <span class="text-gray-500 font-medium text-sm border-r pr-4 border-gray-200">83 تقييم</span>
+                  <div class="flex items-center gap-3 mb-6 bg-gray-50 border border-gray-200 px-4 py-2.5 rounded-full w-fit">
+                    <span class="bg-black text-white px-2 py-0.5 rounded-md text-xs font-black">★ 4.9</span>
+                    <span class="text-black font-black text-sm">{{ ts.t('reviewsCount') }}</span>
+                    <span class="text-green-600 font-bold text-xs flex items-center gap-1">
+                      <span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+                      {{ ts.t('happyCustomers') }}
+                    </span>
                   </div>
 
-                  <!-- Shipping Notice -->
-                  <div class="mb-8 p-4 bg-amber-50 border border-amber-200 rounded-2xl flex items-center gap-4 animate-pulse duration-[3000ms]">
-                    <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center flex-shrink-0 text-amber-600">
+                  <div class="mb-8 p-4 bg-gray-50 border border-gray-200 rounded-2xl flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center flex-shrink-0 text-black">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                       </svg>
                     </div>
                     <div>
-                       <h4 class="font-black text-amber-900 text-base mb-0.5">شحن سريع لدول الخليج! ✈️</h4>
-                       <p class="text-amber-800 text-sm font-medium">يصلك طلبك خلال <span class="font-black underline">7 أيام عمل</span> إلى السعودية، الإمارات، الكويت، قطر، البحرين، وسلطنة عمان.</p>
+                       <h4 class="font-black text-black text-base mb-0.5">{{ ts.t('freeShipping') }}</h4>
+                       <p class="text-gray-600 text-sm font-medium">{{ ts.t('freeShippingDesc') }}</p>
                     </div>
                   </div>
 
-                  <!-- Price -->
-                  <div class="flex items-end gap-4 mb-8 bg-gray-50 p-5 rounded-2xl border border-gray-100 inline-flex w-full">
+                  <div class="flex items-end gap-4 mb-8 bg-gray-50 p-5 rounded-2xl border border-gray-200 inline-flex w-full">
                     <div class="flex flex-col">
-                        <span class="text-sm text-gray-500 mb-1">السعر الحالي</span>
-                        <span class="text-4xl font-black text-primary-600">
+                        <span class="text-sm text-gray-500 mb-1">{{ ts.t('currentPrice') }}</span>
+                        <span class="text-4xl font-black text-black">
                              {{ currencyService.formatPrice(product()!.price) }}
                         </span>
                     </div>
                     @if (product()!.compareAtPrice > product()!.price) {
                         <div class="flex flex-col mb-1.5 mr-4">
-                             <span class="text-xs text-gray-400 line-through">
+                             <span class="text-xs text-gray-500 line-through">
                                 {{ currencyService.formatPrice(product()!.compareAtPrice) }}
                              </span>
-                             <span class="text-xs text-red-500 font-bold">شامل الضريبة</span>
+                             <span class="text-xs text-gray-700 font-bold">{{ ts.t('taxIncl') }}</span>
                         </div>
                     }
                   </div>
 
-                  <!-- Variant Selector -->
-                  @if (product()!.variants.length > 1) {
+                  @if (product()!.bundles && product()!.bundles.length > 0) {
+                     <div class="mb-8">
+                        <h3 class="text-sm font-bold text-black mb-4">{{ ts.t('chooseBundle') }}</h3>
+                        <div class="space-y-3">
+                           @for (bundle of product()!.bundles; track bundle.id) {
+                              <div 
+                                 class="relative flex flex-col p-5 rounded-2xl transition-all duration-300 cursor-pointer"
+                                 (click)="selectBundle(bundle)"
+                                 [class.border-2]="selectedBundle()?.id === bundle.id"
+                                 [class.border-black]="selectedBundle()?.id === bundle.id"
+                                 [class.shadow-[0_8px_30px_rgb(0,0,0,0.04)]]="selectedBundle()?.id === bundle.id"
+                                 [class.bg-gray-50/40]="selectedBundle()?.id === bundle.id"
+                                 [class.border]="selectedBundle()?.id !== bundle.id"
+                                 [class.border-gray-200]="selectedBundle()?.id !== bundle.id"
+                                 [class.hover:border-gray-300]="selectedBundle()?.id !== bundle.id"
+                              >
+                                 <!-- Bundle Header Info -->
+                                 <div class="flex items-center justify-between w-full">
+                                   <div class="flex items-center gap-3">
+                                      <div class="w-5 h-5 rounded-full border-2 flex items-center justify-center bg-white transition-all duration-200" 
+                                           [class.border-black]="selectedBundle()?.id === bundle.id"
+                                           [class.border-gray-300]="selectedBundle()?.id !== bundle.id"
+                                      >
+                                           @if (selectedBundle()?.id === bundle.id) {
+                                              <div class="w-2.5 h-2.5 bg-black rounded-full animate-in zoom-in-50 duration-200"></div>
+                                           }
+                                      </div>
+                                      
+                                      <div class="flex flex-col gap-0.5">
+                                         <div class="flex items-center gap-2 flex-wrap">
+                                            <span class="font-bold text-gray-950 text-base md:text-lg leading-none">{{ bundle.title }}</span>
+                                            @if (bundle.isBestValue) {
+                                               <span class="bg-black text-white text-[10px] font-black px-2 py-0.5 rounded-full leading-none shadow-sm">{{ ts.t('bestSeller') }}</span>
+                                            }
+                                            @if (bundle.savePercent > 0) {
+                                               <span class="bg-red-50 text-red-600 border border-red-100 text-[10px] font-bold px-2 py-0.5 rounded-full leading-none">{{ ts.t('saveLabel') }} {{ bundle.savePercent }}%</span>
+                                            }
+                                         </div>
+                                         <span class="text-xs text-gray-400 font-medium">
+                                            {{ bundle.quantity }} {{ bundle.quantity === 1 ? ts.t('piece') : (bundle.quantity === 2 ? ts.t('twoPieces') : ts.t('pieces')) }}
+                                         </span>
+                                      </div>
+                                   </div>
+
+                                   <div class="text-left flex flex-col items-end">
+                                      <div class="font-black text-lg md:text-xl text-black leading-none">{{ currencyService.formatPrice(bundle.price) }}</div>
+                                      @if (bundle.savings > 0) {
+                                        <div class="text-xs text-gray-400 line-through mt-1 font-medium">{{ currencyService.formatPrice(product()!.price * bundle.quantity) }}</div>
+                                      }
+                                   </div>
+                                 </div>
+
+                                 <!-- Embedded Variant Selectors (Multi-Piece) -->
+                                 @if (selectedBundle()?.id === bundle.id) {
+                                    <div class="mt-4 pt-4 border-t border-gray-150 w-full" (click)="$event.stopPropagation()">
+                                      <div class="bg-white rounded-xl border border-gray-100 p-2 md:p-3 space-y-2">
+                                         <!-- Loop for each item in bundle -->
+                                         @for (idx of getSequence(bundle.quantity); track idx) {
+                                            <div class="flex items-center justify-between py-2 border-b border-gray-50 last:border-0 last:pb-0">
+                                               <span class="text-xs font-bold text-gray-500">
+                                                  {{ bundle.quantity === 1 ? ts.t('chooseColorLabel') : (ts.t('pieceColor') + ' ' + (idx + 1) + ':') }}
+                                               </span>
+                                               <div class="flex gap-2">
+                                                  @for (variant of product()!.variants; track variant.name) {
+                                                     <button 
+                                                        (click)="updateBundleVariant(idx, variant)"
+                                                        class="flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-bold transition-all duration-200 active:scale-95 shadow-sm"
+                                                        [class.border-black]="selectedBundleVariants()[idx]?.name === variant.name"
+                                                        [class.bg-black]="selectedBundleVariants()[idx]?.name === variant.name"
+                                                        [class.text-white]="selectedBundleVariants()[idx]?.name === variant.name"
+                                                        [class.border-gray-200]="selectedBundleVariants()[idx]?.name !== variant.name"
+                                                        [class.bg-white]="selectedBundleVariants()[idx]?.name !== variant.name"
+                                                        [class.text-gray-700]="selectedBundleVariants()[idx]?.name !== variant.name"
+                                                     >
+                                                        <span class="w-3 h-3 rounded-full border border-gray-200 shadow-sm flex-shrink-0" [style.background-color]="variant.colorCode"></span>
+                                                        {{ variant.name }}
+                                                     </button>
+                                                  }
+                                               </div>
+                                            </div>
+                                         }
+                                      </div>
+                                    </div>
+                                 }
+                              </div>
+                           }
+                        </div>
+                     </div>
+                  } @else if (product()!.variants.length > 1) {
                     <div class="mb-8">
-                      <h3 class="text-sm font-bold text-gray-900 mb-4">اختر اللون: <span class="text-primary-600">{{ selectedVariant()?.name }}</span></h3>
+                      <h3 class="text-sm font-bold text-black mb-4">{{ ts.t('chooseColorLabel') }} <span class="text-gray-600">{{ selectedVariant()?.name }}</span></h3>
                       <div class="flex gap-3 flex-wrap">
                         @for (variant of product()!.variants; track variant.id) {
                           <button 
                             (click)="selectVariant(variant)"
                             class="px-5 py-2.5 rounded-xl border-2 transition-all focus:outline-none font-bold text-sm"
-                            [class.border-primary-600]="selectedVariant()?.id === variant.id"
-                            [class.bg-primary-50]="selectedVariant()?.id === variant.id"
-                            [class.text-primary-700]="selectedVariant()?.id === variant.id"
+                            [class.border-black]="selectedVariant()?.id === variant.id"
+                            [class.bg-gray-50]="selectedVariant()?.id === variant.id"
+                            [class.text-black]="selectedVariant()?.id === variant.id"
                             [class.border-gray-200]="selectedVariant()?.id !== variant.id"
+                            [class.text-gray-600]="selectedVariant()?.id !== variant.id"
                           >
                             {{ variant.name }}
                           </button>
@@ -142,126 +226,116 @@ interface UIProduct {
                     </div>
                   }
 
+                   <div class="flex flex-col gap-6 mb-8">
+                       <div class="flex flex-col gap-4">
+                         <div class="flex gap-4">
+                           @if (!product()!.bundles || product()!.bundles.length === 0) {
+                             <div class="flex items-center border border-gray-200 rounded-xl h-16 bg-white overflow-hidden">
+                               <button (click)="decrementQty()" class="w-12 h-full flex items-center justify-center text-gray-500 hover:bg-gray-50 hover:text-black transition-colors font-bold border-l border-gray-200">-</button>
+                               <input type="text" [value]="quantity()" readonly class="w-12 h-full text-center font-black text-black bg-transparent border-none focus:ring-0 p-0 text-lg">
+                               <button (click)="incrementQty()" class="w-12 h-full flex items-center justify-center text-gray-500 hover:bg-gray-50 hover:text-black transition-colors font-bold border-r border-gray-200">+</button>
+                             </div>
+                           }
 
+                           <button 
+                             (click)="addToCart()"
+                             [disabled]="adding()"
+                             class="flex-1 font-bold rounded-xl h-16 flex items-center justify-center gap-2 border border-black text-black hover:bg-gray-50 transition-all text-lg active:scale-95 disabled:opacity-50"
+                           >
+                             @if (addedToCart()) {
+                               <span class="flex items-center gap-2">
+                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg>
+                                 {{ ts.t('added') }}
+                               </span>
+                             } @else {
+                               <span class="flex items-center gap-2">
+                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+                                 {{ ts.t('addToCart') }}
+                               </span>
+                             }
+                           </button>
+                         </div>
 
-
-                   <!-- Add to Cart Button -->
-                  <div class="flex flex-col gap-6 mb-8">
-                      <!-- Action Buttons -->
-                      <div class="flex flex-col gap-4">
-                        <div class="flex gap-4">
-                          <!-- Quantity Selector -->
-                          <div class="flex items-center border-2 border-gray-200 rounded-xl h-16 bg-white overflow-hidden">
-                            <button (click)="decrementQty()" class="w-12 h-full flex items-center justify-center text-gray-500 hover:bg-gray-50 hover:text-primary-600 transition-colors font-bold border-l border-gray-100">-</button>
-                            <input type="text" [value]="quantity()" readonly class="w-12 h-full text-center font-black text-gray-900 border-none focus:ring-0 p-0 text-lg">
-                            <button (click)="incrementQty()" class="w-12 h-full flex items-center justify-center text-gray-500 hover:bg-gray-50 hover:text-primary-600 transition-colors font-bold border-r border-gray-100">+</button>
-                          </div>
-
-                          <!-- Add to Cart -->
-                          <button 
-                            (click)="addToCart()"
-                            [disabled]="adding()"
-                            class="flex-1 font-bold rounded-xl h-16 flex items-center justify-center gap-2 border-2 border-gray-900 text-gray-900 hover:bg-gray-50 transition-all text-lg active:scale-95 disabled:opacity-50"
-                          >
-                            @if (addedToCart()) {
-                              <span class="flex items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg>
-                                تمت الإضافة
+                         <button 
+                           (click)="buyNow()"
+                           [disabled]="adding()"
+                           class="btn-attention w-full font-bold rounded-xl h-16 flex items-center justify-center gap-3 shadow-md transition-all text-xl overflow-hidden relative active:scale-95 bg-black hover:bg-gray-900 text-white disabled:opacity-50"
+                         >
+                           <div class="flex items-center gap-3">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                              </svg>
+                              <span>
+                                {{ ts.t('buyNow') }} - {{ currencyService.formatPrice(selectedBundle() ? selectedBundle()!.price : product()!.price * quantity()) }}
                               </span>
-                            } @else {
-                              <span class="flex items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
-                                أضف للسلة
-                              </span>
-                            }
-                          </button>
-                        </div>
+                           </div>
+                         </button>
+                       </div>
+                   </div>
 
-                        <!-- Buy Now Button -->
-                        <button 
-                          (click)="buyNow()"
-                          [disabled]="adding()"
-                          class="btn-attention w-full font-bold rounded-xl h-16 flex items-center justify-center gap-3 shadow-xl transition-all text-xl overflow-hidden relative active:scale-95 bg-gray-900 hover:bg-primary-600 text-white disabled:opacity-50"
-                        >
-                          <div class="flex items-center gap-3">
-                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                             </svg>
-                             <span>
-                               🔥 شراء الآن - {{ currencyService.formatPrice(product()!.price * quantity()) }}
-                             </span>
-                          </div>
-                        </button>
-                      </div>
-                  </div>
-
-                  
-                  <!-- Trust Badges & Description... (Retained) -->
                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 py-6 border-t border-b border-gray-100">
                         <div class="flex flex-col items-center text-center gap-2">
-                            <span class="text-xs font-bold text-gray-700">جودة مضمونة</span>
+                            <span class="text-xs font-bold text-gray-500">{{ ts.t('qualityGuarantee') }}</span>
                         </div>
                         <div class="flex flex-col items-center text-center gap-2">
-                            <span class="text-xs font-bold text-gray-700">شحن سريع</span>
+                            <span class="text-xs font-bold text-gray-500">{{ ts.t('freeShippingBadge') }}</span>
                         </div>
                         <div class="flex flex-col items-center text-center gap-2">
-                            <span class="text-xs font-bold text-gray-700">دفع آمن</span>
+                            <span class="text-xs font-bold text-gray-500">{{ ts.t('securePay') }}</span>
                         </div>
                         <div class="flex flex-col items-center text-center gap-2">
-                            <span class="text-xs font-bold text-gray-700">استرجاع سهل</span>
+                            <span class="text-xs font-bold text-gray-500">{{ ts.t('easyReturn') }}</span>
                         </div>
-                  </div>
+                   </div>
 
-                  <!-- Description & Features -->
                   <div class="space-y-6 mt-8">
-                    <div class="border rounded-2xl p-6 bg-gray-50/50 border-gray-100 shadow-sm hover:bg-white transition-all duration-300">
-                      <h3 class="font-bold text-xl mb-6 flex items-center justify-between text-gray-900">
-                        <span>الوصف والمميزات</span>
-                        <div class="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-600">
+                    <div class="border rounded-2xl p-6 bg-white border-gray-200 shadow-sm transition-all duration-300">
+                      <h3 class="font-bold text-xl mb-6 flex items-center justify-between text-black">
+                        <span>{{ ts.t('descFeatures') }}</span>
+                        <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-black">
                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         </div>
                       </h3>
                       
                       <div class="space-y-4 text-gray-600 leading-relaxed text-base font-medium mb-8">
-                        <p>تبي الفكة من قروشة التفتيش؟ وتبي أغراضك تكون معك طول الوقت؟</p>
-                        <p>مطارة نوريفا™ هي الحل اللي تدوره. شكلها مطارة ماي كشخة وعادية، بس داخلها "علوم ثانية"! 😉</p>
-                        <p>فيها مخبأ سري تحت، وسيع وراهي! يشيل جوالك بالراحة (حتى لو معك آيفون 17 برو ماكس)، ويشيل سماعاتك، والفيب (Vape)، وحتى فلوسك.</p>
-                        <p>والأهم من هذا كله؟ ما تخر ماي أبداً! نظام العزل فيها بطل، يعني تطمن أغراضك ناشفة وأمان 100%.</p>
-                        <p>شكلها بريء ما يلفت النظر، يعني تمشي أمورك فالمدرسة والطلعات وأنت مرتاح. خلك ذيب واضمن أغراضك معك!</p>
+                        <p>{{ ts.t('descP1') }}</p>
+                        <p>{{ ts.t('descP2') }}</p>
+                        <p>{{ ts.t('descP3') }}</p>
+                        <p>{{ ts.t('descP4') }}</p>
                       </div>
 
-                      <ul class="space-y-3 pt-6 border-t border-gray-200/50">
-                        <li class="flex items-start gap-3 text-gray-800">
-                          <div class="mt-1 w-5 h-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                              <svg class="w-3 h-3 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <ul class="space-y-3 pt-6 border-t border-gray-100">
+                        <li class="flex items-start gap-3 text-gray-700">
+                          <div class="mt-1 w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
+                              <svg class="w-3 h-3 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
                               </svg>
                           </div>
-                          <span class="font-bold text-sm">مخبأ راهي: <span class="font-medium text-gray-600">يشيل آيفون 17 برو ماكس، إيربودز، والفيب بالراحة.</span></span>
+                          <span class="font-bold text-sm">{{ ts.t('rgbLabel') }}: <span class="font-medium text-gray-500">{{ ts.t('featRgbDesc') }}</span></span>
                         </li>
-                        <li class="flex items-start gap-3 text-gray-800">
-                          <div class="mt-1 w-5 h-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                              <svg class="w-3 h-3 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <li class="flex items-start gap-3 text-gray-700">
+                          <div class="mt-1 w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
+                              <svg class="w-3 h-3 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
                               </svg>
                           </div>
-                          <span class="font-bold text-sm">ما تخر أبد: <span class="font-medium text-gray-600">عزل 100% بين الماي والأغراض، يعني أجهزتك بأمان.</span></span>
+                          <span class="font-bold text-sm">{{ ts.t('featMecTitle') }}: <span class="font-medium text-gray-500">{{ ts.t('featMecDesc') }}</span></span>
                         </li>
-                        <li class="flex items-start gap-3 text-gray-800">
-                          <div class="mt-1 w-5 h-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                              <svg class="w-3 h-3 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <li class="flex items-start gap-3 text-gray-700">
+                          <div class="mt-1 w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
+                              <svg class="w-3 h-3 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
                               </svg>
                           </div>
-                          <span class="font-bold text-sm">تمويه ولا غلطة: <span class="font-medium text-gray-600">شكلها مطارة عادية، محد بيشك فيك.</span></span>
+                          <span class="font-bold text-sm">{{ ts.t('featGiftTitle') }}: <span class="font-medium text-gray-500">{{ ts.t('featGiftDesc') }}</span></span>
                         </li>
-                        <li class="flex items-start gap-3 text-gray-800">
-                          <div class="mt-1 w-5 h-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                              <svg class="w-3 h-3 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <li class="flex items-start gap-3 text-gray-700">
+                          <div class="mt-1 w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
+                              <svg class="w-3 h-3 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
                               </svg>
                           </div>
-                          <span class="font-bold text-sm">جودة توب: <span class="font-medium text-gray-600">تتحمل الكرف والطيحات، تعيش معك.</span></span>
+                          <span class="font-bold text-sm">{{ ts.t('featQualTitle') }}: <span class="font-medium text-gray-500">{{ ts.t('featQualDesc') }}</span></span>
                         </li>
                       </ul>
                     </div>
@@ -271,15 +345,14 @@ interface UIProduct {
 
                 <!-- Image Gallery -->
                 <div class="space-y-6 order-1 lg:order-first lg:sticky lg:top-32 h-fit">
-                  <!-- Main Image Carousel -->
-                  <div class="relative group bg-gray-50 rounded-3xl border border-gray-100 overflow-hidden">
+                  <div class="relative group bg-gray-50 rounded-3xl border border-gray-200 overflow-hidden">
                     <div 
                       #mainImageContainer
                       class="flex overflow-x-auto snap-x snap-mandatory no-scrollbar aspect-square scroll-smooth"
                       (scroll)="onMainScroll()"
                     >
                       @for (img of currentProduct.images; track img; let i = $index) {
-                        <div class="min-w-full h-full snap-center flex items-center justify-center relative bg-white">
+                        <div class="min-w-full h-full snap-center flex items-center justify-center relative bg-gray-50">
                           <img 
                             [src]="img" 
                             class="object-cover w-full h-full rounded-2xl shadow-sm"
@@ -290,19 +363,18 @@ interface UIProduct {
                     </div>
                     
                     @if (getDiscountPercentage() > 0) {
-                        <span class="absolute top-4 right-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg z-10">
-                        وفر {{ getDiscountPercentage() }}%
+                        <span class="absolute top-4 right-4 bg-black text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm z-10">
+                        {{ ts.t('saveLabel') }} {{ getDiscountPercentage() }}%
                         </span>
                     }
                     
-                    <!-- Navigation Arrows -->
-                    <button (click)="scrollNext()" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white border border-gray-200 rounded-full p-3 shadow-lg transition-all z-20 active:scale-95 flex items-center justify-center text-gray-800 backdrop-blur-sm">
+                    <button (click)="scrollNext()" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white hover:bg-gray-50 border border-gray-200 rounded-full p-3 shadow-sm transition-all z-20 active:scale-95 flex items-center justify-center text-gray-600 backdrop-blur-sm">
                       <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                       </svg>
                     </button>
                     
-                    <button (click)="scrollPrev()" class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white border border-gray-200 rounded-full p-3 shadow-lg transition-all z-20 active:scale-95 flex items-center justify-center text-gray-800 backdrop-blur-sm">
+                    <button (click)="scrollPrev()" class="absolute right-4 top-1/2 -translate-y-1/2 bg-white hover:bg-gray-50 border border-gray-200 rounded-full p-3 shadow-sm transition-all z-20 active:scale-95 flex items-center justify-center text-gray-600 backdrop-blur-sm">
                       <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                       </svg>
@@ -313,7 +385,7 @@ interface UIProduct {
             </div>
 
             <!-- Reviews Section -->
-            <div class="mt-24 border-t pt-20">
+            <div class="mt-24 border-t border-gray-100 pt-20">
               <app-reviews></app-reviews>
             </div>
       </div>
@@ -340,6 +412,7 @@ export class ProductPageComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private shopifyService = inject(ShopifyService);
   currencyService = inject(CurrencyService);
+  ts = inject(TranslationService);
 
   @ViewChild('mainImageContainer') mainImageContainer!: ElementRef<HTMLElement>;
 
@@ -349,7 +422,8 @@ export class ProductPageComponent implements OnInit {
 
   quantity = signal(1);
   selectedVariant = signal<UIProductVariant | null>(null);
-
+  selectedBundle = signal<UIProductBundle | null>(null);
+  selectedBundleVariants = signal<UIProductVariant[]>([]);
 
   adding = signal(false);
   addedToCart = signal(false);
@@ -360,7 +434,6 @@ export class ProductPageComponent implements OnInit {
         const handle = params.get('handle');
         this.loading.set(true);
         this.error.set(null);
-        // Reset product to avoid using old data
         this.product.set(null);
 
         if (handle) {
@@ -383,19 +456,38 @@ export class ProductPageComponent implements OnInit {
   }
 
   private processShopifyProduct(data: any) {
-    const variants: UIProductVariant[] = data.variants.map((v: any) => ({
-      id: v.id,
-      name: v.title,
-      colorCode: '#000000',
-      image: v.image?.src,
-      price: parseFloat(v.price.amount)
-    }));
+    const variants: UIProductVariant[] = data.variants.map((v: any) => {
+      let name = v.title;
+      let colorCode = '#000000';
+      const titleLower = v.title.toLowerCase();
+      if (titleLower.includes('black')) {
+        name = this.ts.t('colorBlack');
+        colorCode = '#1f2937';
+      } else if (titleLower.includes('clear') || titleLower.includes('transparent')) {
+        name = this.ts.t('colorClear');
+        colorCode = '#e0e7ff';
+      } else {
+        // Cleanup remaining "(with light)" or "(مع إضاءة)" texts
+        name = name.replace(/\(with light\)/gi, '')
+                   .replace(/with light/gi, '')
+                   .replace(/\(مع إضاءة\)/g, '')
+                   .replace(/مع إضاءة/g, '')
+                   .trim();
+      }
+      return {
+        id: v.id,
+        name: name,
+        colorCode: colorCode,
+        image: v.image?.src,
+        price: parseFloat(v.price.amount)
+      };
+    });
 
     const basePrice = variants[0]?.price || 0;
 
     const product: UIProduct = {
       id: data.id,
-      title: data.title,
+      title: this.ts.language() === 'en' ? 'Kypolight™ — LED Keyboard Keychain' : data.title,
       description: data.description,
       descriptionHtml: data.descriptionHtml,
       images: data.images.map((img: any) => img.src),
@@ -403,7 +495,11 @@ export class ProductPageComponent implements OnInit {
       price: basePrice,
       compareAtPrice: 0,
       features: [],
-      bundles: []
+      bundles: [
+        { id: 'b1', title: this.ts.t('bundle1'), quantity: 1, price: basePrice, savings: 0, savePercent: 0 },
+        { id: 'b2', title: this.ts.t('bundle2'), quantity: 2, price: 88.90, savings: basePrice * 2 - 88.90, savePercent: 5, isBestValue: true },
+        { id: 'b3', title: this.ts.t('bundle3'), quantity: 4, price: 131.01, savings: basePrice * 4 - 131.01, savePercent: 30 }
+      ]
     };
 
     if (data.variants[0]?.compareAtPrice) {
@@ -414,25 +510,57 @@ export class ProductPageComponent implements OnInit {
     if (variants.length > 0) {
       this.selectVariant(variants[0]);
     }
+    if (product.bundles.length > 0) {
+      this.selectBundle(product.bundles[0]);
+    }
   }
-
 
   selectVariant(variant: UIProductVariant) {
     this.selectedVariant.set(variant);
-
-    // Auto-scroll to specific images based on variant selection
-    const product = this.product();
-    if (product && product.images.length > 0) {
-      if (variant.name.includes('أبيض') || variant.name.toLowerCase().includes('white')) {
-        this.scrollToIndex(product.images.length - 1);
-      } else if (variant.name.includes('أحمر') || variant.name.toLowerCase().includes('red')) {
-        if (product.images.length >= 2) {
-          this.scrollToIndex(product.images.length - 2);
-        }
+    
+    // Find variant image index in product images and scroll to it
+    if (variant.image) {
+      const idx = this.product()?.images.findIndex(img => {
+        const cleanImg = img.split('?')[0];
+        const cleanVarImg = variant.image!.split('?')[0];
+        return cleanImg === cleanVarImg || img.includes(cleanVarImg) || cleanVarImg.includes(img);
+      });
+      if (idx !== undefined && idx !== -1) {
+        this.scrollToIndex(idx);
       }
     }
   }
 
+  selectBundle(bundle: UIProductBundle) {
+    this.selectedBundle.set(bundle);
+    const p = this.product();
+    if (p && p.variants.length > 0) {
+      const arr = Array(bundle.quantity).fill(p.variants[0]);
+      this.selectedBundleVariants.set(arr);
+    }
+  }
+
+  updateBundleVariant(index: number, variant: UIProductVariant) {
+    const arr = [...this.selectedBundleVariants()];
+    arr[index] = variant;
+    this.selectedBundleVariants.set(arr);
+
+    // Find variant image index in product images and scroll to it
+    if (variant.image) {
+      const idx = this.product()?.images.findIndex(img => {
+        const cleanImg = img.split('?')[0];
+        const cleanVarImg = variant.image!.split('?')[0];
+        return cleanImg === cleanVarImg || img.includes(cleanVarImg) || cleanVarImg.includes(img);
+      });
+      if (idx !== undefined && idx !== -1) {
+        this.scrollToIndex(idx);
+      }
+    }
+  }
+
+  getSequence(n: number): number[] {
+    return Array.from({ length: n }, (_, i) => i);
+  }
 
   incrementQty() {
     this.quantity.update(q => q + 1);
@@ -443,40 +571,70 @@ export class ProductPageComponent implements OnInit {
   }
 
   addToCart() {
-    const variant = this.selectedVariant();
-    const qty = this.quantity();
-
-    if (!variant) return;
-
     this.adding.set(true);
+    const bundle = this.selectedBundle();
+    
+    if (bundle && bundle.quantity > 0) {
+      const variants = this.selectedBundleVariants();
+      const items = variants.map(v => ({ variantId: v.id, quantity: 1 }));
+      
+      // Combine identical items
+      const combinedItems: { [id: string]: number } = {};
+      items.forEach(item => {
+        combinedItems[item.variantId] = (combinedItems[item.variantId] || 0) + item.quantity;
+      });
+      
+      const finalItems = Object.keys(combinedItems).map(id => ({ variantId: id, quantity: combinedItems[id] }));
 
-    this.shopifyService.addItemToCheckout(variant.id, qty);
+      // Store the bundle discount so the cart drawer shows discounted prices
+      if (bundle.savePercent > 0) {
+        this.shopifyService.bundleDiscount.set({ quantity: bundle.quantity, totalPrice: bundle.price });
+      } else {
+        this.shopifyService.bundleDiscount.set(null);
+      }
+
+      this.shopifyService.addItemsToCheckout(finalItems);
+    } else {
+      const variant = this.selectedVariant();
+      if (!variant) return;
+      this.shopifyService.bundleDiscount.set(null);
+      this.shopifyService.addItemToCheckout(variant.id, this.quantity());
+    }
 
     setTimeout(() => {
       this.adding.set(false);
       this.addedToCart.set(true);
-      this.shopifyService.openCart(); // Auto-open cart for better UX
+      this.shopifyService.openCart();
       setTimeout(() => this.addedToCart.set(false), 2000);
     }, 1000);
   }
 
   buyNow() {
-    const variant = this.selectedVariant();
-    const qty = this.quantity();
-
-    if (!variant) return;
-
     this.adding.set(true);
-
-    this.shopifyService.addItemToCheckout(variant.id, qty);
+    const bundle = this.selectedBundle();
+    
+    if (bundle && bundle.quantity > 0) {
+      const variants = this.selectedBundleVariants();
+      const items = variants.map(v => ({ variantId: v.id, quantity: 1 }));
+      
+      const combinedItems: { [id: string]: number } = {};
+      items.forEach(item => {
+        combinedItems[item.variantId] = (combinedItems[item.variantId] || 0) + item.quantity;
+      });
+      
+      const finalItems = Object.keys(combinedItems).map(id => ({ variantId: id, quantity: combinedItems[id] }));
+      this.shopifyService.addItemsToCheckout(finalItems);
+    } else {
+      const variant = this.selectedVariant();
+      if (!variant) return;
+      this.shopifyService.addItemToCheckout(variant.id, this.quantity());
+    }
 
     setTimeout(() => {
       this.adding.set(false);
-      this.shopifyService.redirectToCheckout(); // Redirect to checkout immediately
+      this.shopifyService.redirectToCheckout();
     }, 1000);
   }
-
-
 
   getDiscountPercentage() {
     const p = this.product();
@@ -484,18 +642,13 @@ export class ProductPageComponent implements OnInit {
     return Math.round(((p.compareAtPrice - p.price) / p.compareAtPrice) * 100);
   }
 
-  // --- Scroll Logic ---
   scrollToIndex(index: number) {
     if (this.mainImageContainer?.nativeElement) {
       const container = this.mainImageContainer.nativeElement;
       const child = container.children[index] as HTMLElement;
       if (child) {
-        // Calculate scroll position manually to avoid 'jumpy' page behavior caused by scrollIntoView
         const scrollAmount = child.offsetLeft - container.offsetLeft;
-        container.scrollTo({
-          left: scrollAmount,
-          behavior: 'smooth'
-        });
+        container.scrollTo({ left: scrollAmount, behavior: 'smooth' });
       }
     }
   }
@@ -506,14 +659,9 @@ export class ProductPageComponent implements OnInit {
   private scrollDirection(direction: 'next' | 'prev') {
     if (!this.mainImageContainer?.nativeElement) return;
     const container = this.mainImageContainer.nativeElement;
-    // Calculate current index based on scroll amount
     const currentIndex = Math.round(Math.abs(container.scrollLeft) / container.offsetWidth);
     const total = this.product()?.images.length || 0;
-
     let nextIndex = direction === 'next' ? currentIndex + 1 : currentIndex - 1;
-
-    // In RTL, "Next" moves to the left (negative scroll in some browsers), 
-    // but we use the index to keep logic simple.
     if (nextIndex >= 0 && nextIndex < total) {
       this.scrollToIndex(nextIndex);
     }

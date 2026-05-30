@@ -19,18 +19,18 @@ import { Router, RouterLink } from '@angular/router';
         @if (orderComplete()) {
           <!-- Success State -->
           <div class="max-w-2xl mx-auto bg-white rounded-3xl p-12 text-center border border-gray-100 shadow-xl animate-in zoom-in duration-500">
-            <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 text-green-600">
+            <div class="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6 text-green-600">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h1 class="text-4xl font-black text-gray-900 mb-4">تم الطلب بنجاح!</h1>
+            <h1 class="text-4xl font-black text-black mb-4">تم الطلب بنجاح!</h1>
             <p class="text-gray-600 text-lg mb-8">
-              شكراً لثقتك بنا. رقم طلبك هو <span class="font-bold text-gray-900">#NOR-{{ orderNumber() }}</span>.
+              شكراً لثقتك بنا. رقم طلبك هو <span class="font-bold text-black">#KYP-{{ orderNumber() }}</span>.
               <br>سنرسل تفاصيل الشحن إلى بريدك الإلكتروني قريباً.
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-               <a routerLink="/" class="inline-flex items-center justify-center bg-gray-900 text-white font-bold py-4 px-10 rounded-xl hover:bg-gray-800 transition-all shadow-lg">العودة للرئيسية</a>
+               <a routerLink="/" class="inline-flex items-center justify-center bg-black text-white font-bold py-4 px-10 rounded-xl hover:bg-gray-900 transition-all shadow-md">العودة للرئيسية</a>
                <a routerLink="/tracking" class="inline-flex items-center justify-center bg-gray-100 text-gray-900 font-bold py-4 px-10 rounded-xl hover:bg-gray-200 transition-all">تتبع الطلب</a>
             </div>
           </div>
@@ -43,24 +43,24 @@ import { Router, RouterLink } from '@angular/router';
               
               <!-- Profile Notice -->
               @if(!authService.isLoggedIn()) {
-                <div class="bg-primary-50 border border-primary-100 p-4 rounded-xl flex items-center justify-between">
+                <div class="bg-gray-100 border border-gray-200 p-4 rounded-xl flex items-center justify-between shadow-sm">
                    <div class="flex items-center gap-3">
-                      <div class="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center text-primary-600">
+                      <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-gray-900 border border-gray-200">
                          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                       </div>
                       <div>
-                        <h4 class="font-bold text-gray-900 text-sm">لديك حساب؟</h4>
+                        <h4 class="font-bold text-black text-sm">لديك حساب؟</h4>
                         <p class="text-gray-500 text-xs">سجل دخولك لحفظ بياناتك</p>
                       </div>
                    </div>
-                   <a routerLink="/login" class="text-primary-600 font-bold text-sm hover:underline">تسجيل الدخول</a>
+                   <a routerLink="/login" class="text-black font-bold text-sm hover:underline">تسجيل الدخول</a>
                 </div>
               }
 
-              <div class="bg-white rounded-2xl border border-gray-100 p-6 md:p-8 shadow-sm">
+              <div class="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm">
                 
-                  <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                    <span class="w-8 h-8 rounded-full bg-gray-900 text-white flex items-center justify-center text-sm font-bold">1</span>
+                  <h2 class="text-xl font-bold text-black mb-6 flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center text-sm font-bold">1</span>
                     بيانات الشحن
                   </h2>
                   
@@ -71,13 +71,13 @@ import { Router, RouterLink } from '@angular/router';
                       <div class="space-y-1">
                         <label class="text-xs font-bold text-gray-700">البريد الإلكتروني</label>
                         <input type="email" formControlName="email" 
-                               class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all"
+                               class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-black outline-none focus:border-black focus:ring-1 focus:ring-black transition-all"
                                [class.border-red-500]="isFieldInvalid('email')">
                       </div>
                       <div class="space-y-1">
                         <label class="text-xs font-bold text-gray-700">رقم الجوال</label>
                         <input type="tel" formControlName="phone" placeholder="05xxxxxxxx"
-                               class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all"
+                               class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-black outline-none focus:border-black focus:ring-1 focus:ring-black transition-all"
                                [class.border-red-500]="isFieldInvalid('phone')">
                       </div>
                     </div>
@@ -88,19 +88,19 @@ import { Router, RouterLink } from '@angular/router';
                         <div class="space-y-1">
                           <label class="text-xs font-bold text-gray-700">الاسم الأول</label>
                           <input type="text" formControlName="firstName" 
-                                 class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all">
+                                 class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-black outline-none focus:border-black focus:ring-1 focus:ring-black transition-all">
                         </div>
                         <div class="space-y-1">
                           <label class="text-xs font-bold text-gray-700">اسم العائلة</label>
                           <input type="text" formControlName="lastName" 
-                                 class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all">
+                                 class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-black outline-none focus:border-black focus:ring-1 focus:ring-black transition-all">
                         </div>
                       </div>
 
                       <div class="space-y-1">
                         <label class="text-xs font-bold text-gray-700">الدولة</label>
                         <div class="relative">
-                          <select formControlName="country" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all appearance-none cursor-pointer">
+                          <select formControlName="country" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-black outline-none focus:border-black focus:ring-1 focus:ring-black transition-all appearance-none cursor-pointer">
                             <option value="SA">المملكة العربية السعودية</option>
                             <option value="AE">الإمارات العربية المتحدة</option>
                             <option value="KW">الكويت</option>
@@ -111,6 +111,11 @@ import { Router, RouterLink } from '@angular/router';
                             <option value="EG">مصر</option>
                             <option value="IQ">العراق</option>
                             <option value="JO">الأردن</option>
+                            <option value="DZ">الجزائر</option>
+                            <option value="MA">المغرب</option>
+                            <option value="SD">السودان</option>
+                            <option value="TN">تونس</option>
+                            <option value="YE">اليمن</option>
                           </select>
                           <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
                             <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
@@ -121,30 +126,30 @@ import { Router, RouterLink } from '@angular/router';
                       <div class="grid md:grid-cols-2 gap-4">
                         <div class="space-y-1">
                           <label class="text-xs font-bold text-gray-700">المدينة</label>
-                          <input type="text" formControlName="city" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all">
+                          <input type="text" formControlName="city" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-black outline-none focus:border-black focus:ring-1 focus:ring-black transition-all">
                         </div>
                         <div class="space-y-1">
                           <label class="text-xs font-bold text-gray-700">العنوان / الحي</label>
-                          <input type="text" formControlName="address" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-900 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all">
+                          <input type="text" formControlName="address" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-black outline-none focus:border-black focus:ring-1 focus:ring-black transition-all">
                         </div>
                       </div>
                     </div>
 
                     <div class="pt-6 border-t border-gray-100 mt-6">
-                      <h2 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                        <span class="w-8 h-8 rounded-full bg-gray-900 text-white flex items-center justify-center text-sm font-bold">2</span>
+                      <h2 class="text-xl font-bold text-black mb-6 flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center text-sm font-bold">2</span>
                         طريقة الدفع
                       </h2>
                       
                       <div class="space-y-3">
                         <label class="group relative flex items-center justify-between p-4 rounded-xl border cursor-pointer transition-all"
-                               [class.border-primary-500]="checkoutForm.get('paymentMethod')?.value === 'card'"
-                               [class.bg-primary-50]="checkoutForm.get('paymentMethod')?.value === 'card'"
+                               [class.border-black]="checkoutForm.get('paymentMethod')?.value === 'card'"
+                               [class.bg-gray-50]="checkoutForm.get('paymentMethod')?.value === 'card'"
                                [class.border-gray-200]="checkoutForm.get('paymentMethod')?.value !== 'card'">
                           <div class="flex items-center gap-3">
-                            <input type="radio" formControlName="paymentMethod" value="card" class="text-primary-600 focus:ring-primary-500 w-5 h-5">
+                            <input type="radio" formControlName="paymentMethod" value="card" class="text-black focus:ring-black w-5 h-5">
                             <div class="flex flex-col">
-                              <span class="font-bold text-gray-900">بطاقة ائتمان / مدى</span>
+                              <span class="font-bold text-black">بطاقة ائتمان / مدى</span>
                             </div>
                           </div>
                           <div class="flex gap-2 opacity-80">
@@ -154,13 +159,13 @@ import { Router, RouterLink } from '@angular/router';
                         </label>
 
                         <label class="group relative flex items-center justify-between p-4 rounded-xl border cursor-pointer transition-all"
-                               [class.border-primary-500]="checkoutForm.get('paymentMethod')?.value === 'cod'"
-                               [class.bg-primary-50]="checkoutForm.get('paymentMethod')?.value === 'cod'"
+                               [class.border-black]="checkoutForm.get('paymentMethod')?.value === 'cod'"
+                               [class.bg-gray-50]="checkoutForm.get('paymentMethod')?.value === 'cod'"
                                [class.border-gray-200]="checkoutForm.get('paymentMethod')?.value !== 'cod'">
                           <div class="flex items-center gap-3">
-                            <input type="radio" formControlName="paymentMethod" value="cod" class="text-primary-600 focus:ring-primary-500 w-5 h-5">
+                            <input type="radio" formControlName="paymentMethod" value="cod" class="text-black focus:ring-black w-5 h-5">
                             <div class="flex flex-col">
-                              <span class="font-bold text-gray-900">الدفع عند الاستلام</span>
+                              <span class="font-bold text-black">الدفع عند الاستلام</span>
                               <span class="text-xs text-gray-500">+ {{ currencyService.formatPrice(15) }} رسوم إضافية</span>
                             </div>
                           </div>
@@ -174,8 +179,8 @@ import { Router, RouterLink } from '@angular/router';
 
             <!-- Left Column: Order Summary (Sticky) -->
             <div class="lg:w-1/3 sticky top-32">
-               <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-                  <h3 class="text-lg font-bold text-gray-900 mb-6 pb-4 border-b border-gray-100">ملخص الطلب</h3>
+               <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+                  <h3 class="text-lg font-bold text-black mb-6 pb-4 border-b border-gray-100">ملخص الطلب</h3>
                   
                   <!-- Cart Items -->
                   <div class="space-y-4 mb-6 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar rtl">
@@ -183,14 +188,14 @@ import { Router, RouterLink } from '@angular/router';
                       <div class="flex gap-4 items-center">
                         <div class="relative w-16 h-16 bg-gray-50 rounded-lg border border-gray-200 flex-shrink-0">
                            <img [src]="item.variant?.image?.src || item.variant?.image" class="w-full h-full object-contain rounded-lg">
-                           <span class="absolute -top-2 -right-2 bg-gray-900 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">{{ item.quantity }}</span>
+                           <span class="absolute -top-2 -right-2 bg-black text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">{{ item.quantity }}</span>
                         </div>
                         <div class="flex-grow">
-                          <h4 class="font-bold text-gray-900 text-sm line-clamp-1 leading-tight">{{ item.title }}</h4>
+                          <h4 class="font-bold text-black text-sm line-clamp-1 leading-tight">{{ item.title }}</h4>
                           <p class="text-xs text-gray-500 mt-1">{{ item.variant?.title }}</p>
                         </div>
                         <div class="text-left">
-                           <span class="font-bold text-gray-900 text-sm">{{ currencyService.formatPrice(getItemDisplayPrice(item)) }}</span>
+                           <span class="font-bold text-black text-sm">{{ currencyService.formatPrice(getItemDisplayPrice(item)) }}</span>
                         </div>
 
                       </div>
@@ -208,7 +213,7 @@ import { Router, RouterLink } from '@angular/router';
                       <span class="text-green-600 font-bold text-xs">مجاني</span>
                     </div>
                     @if (shopifyService.shippingProtection()) {
-                      <div class="flex justify-between items-center text-blue-600 text-sm bg-blue-50 p-2 rounded-lg">
+                      <div class="flex justify-between items-center text-gray-600 text-sm bg-gray-100 p-2 rounded-lg">
                         <span class="flex items-center gap-1 font-bold">
                           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
                           حماية الشحن
@@ -227,15 +232,15 @@ import { Router, RouterLink } from '@angular/router';
                   <!-- Final Total -->
                   <div class="pt-6 border-t border-gray-100 mt-4">
                     <div class="flex justify-between items-end mb-6">
-                       <span class="font-black text-xl text-gray-900">الإجمالي</span>
-                       <span class="text-3xl font-black text-primary-600 tabular-nums">{{ currencyService.formatPrice(calculateFinalTotal(cart)) }}</span>
+                       <span class="font-black text-xl text-black">الإجمالي</span>
+                       <span class="text-3xl font-black text-black tabular-nums">{{ currencyService.formatPrice(calculateFinalTotal(cart)) }}</span>
                     </div>
                     <p class="text-xs text-gray-400 mb-6 -mt-4 text-left">شامل ضريبة القيمة المضافة</p>
 
                     <button 
                       (click)="onSubmit()"
                       [disabled]="isProcessing()"
-                      class="w-full h-14 bg-gray-900 text-white rounded-xl font-bold hover:bg-primary-600 transition-all shadow-lg active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                      class="w-full h-14 bg-black text-white rounded-xl font-bold hover:bg-gray-800 transition-all shadow-md active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
                     >
                       @if (isProcessing()) {
                          <div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -308,7 +313,34 @@ export class CheckoutComponent implements OnInit {
     window.scrollTo(0, 0);
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    // 1. Initialize country dropdown based on active currency
+    const activeCurrency = this.currencyService.selectedCurrency().code;
+    const currencyToCountryMap: { [key: string]: string } = {
+      'AED': 'AE', 'SAR': 'SA', 'KWD': 'KW', 'BHD': 'BH',
+      'OMR': 'OM', 'QAR': 'QA', 'LYD': 'LY', 'EGP': 'EG',
+      'IQD': 'IQ', 'JOD': 'JO', 'DZD': 'DZ', 'MAD': 'MA',
+      'SDG': 'SD', 'TND': 'TN', 'YER': 'YE'
+    };
+
+    const mappedCountry = currencyToCountryMap[activeCurrency] || 'SA';
+    this.checkoutForm.patchValue({ country: mappedCountry }, { emitEvent: false });
+
+    // 2. Listen to country dropdown changes and update active currency
+    this.checkoutForm.get('country')?.valueChanges.subscribe(countryCode => {
+      const countryToCurrencyMap: { [key: string]: string } = {
+        'AE': 'AED', 'SA': 'SAR', 'KW': 'KWD', 'BH': 'BHD',
+        'OM': 'OMR', 'QA': 'QAR', 'LY': 'LYD', 'EG': 'EGP',
+        'IQ': 'IQD', 'JO': 'JOD', 'DZ': 'DZD', 'MA': 'MAD',
+        'SD': 'SDG', 'TN': 'TND', 'YE': 'YER'
+      };
+
+      const matchedCurrencyCode = countryToCurrencyMap[countryCode];
+      if (matchedCurrencyCode && this.currencyService.selectedCurrency().code !== matchedCurrencyCode) {
+        this.currencyService.setCurrency(matchedCurrencyCode);
+      }
+    });
+  }
 
   isFieldInvalid(field: string): boolean {
     const control = this.checkoutForm.get(field);

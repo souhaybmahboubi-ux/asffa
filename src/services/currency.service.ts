@@ -16,16 +16,21 @@ export class CurrencyService {
   private appRef = inject(ApplicationRef);
 
   readonly currencies: Currency[] = [
-    { code: 'SAR', name: 'السعودية', symbol: 'ر.س', rate: 1.0000, flag: '🇸🇦' },
-    { code: 'AED', name: 'الإمارات', symbol: 'د.إ', rate: 0.9791, flag: '🇦🇪' },
-    { code: 'KWD', name: 'الكويت', symbol: 'د.ك', rate: 0.0822, flag: '🇰🇼' },
-    { code: 'BHD', name: 'البحرين', symbol: 'د.ب', rate: 0.1005, flag: '🇧🇭' },
-    { code: 'OMR', name: 'عمان', symbol: 'ر.ع', rate: 0.1027, flag: '🇴🇲' },
-    { code: 'QAR', name: 'قطر', symbol: 'ر.ق', rate: 0.9708, flag: '🇶🇦' },
-    { code: 'LYD', name: 'ليبيا', symbol: 'ل.د', rate: 1.2850, flag: '🇱🇾' },
-    { code: 'EGP', name: 'مصر', symbol: 'ج.م', rate: 13.4126, flag: '🇪🇬' },
-    { code: 'IQD', name: 'العراق', symbol: 'د.ع', rate: 349.345, flag: '🇮🇶' },
-    { code: 'JOD', name: 'الأردن', symbol: 'د.أ', rate: 0.1891, flag: '🇯🇴' }
+    { code: 'AED', name: 'الإمارات', symbol: 'د.إ', rate: 1.0000, flag: '🇦🇪' },
+    { code: 'SAR', name: 'السعودية', symbol: 'ر.س', rate: 1.0213, flag: '🇸🇦' },
+    { code: 'KWD', name: 'الكويت', symbol: 'د.ك', rate: 0.0839, flag: '🇰🇼' },
+    { code: 'BHD', name: 'البحرين', symbol: 'د.ب', rate: 0.1026, flag: '🇧🇭' },
+    { code: 'OMR', name: 'عمان', symbol: 'ر.ع', rate: 0.1049, flag: '🇴🇲' },
+    { code: 'QAR', name: 'قطر', symbol: 'ر.ق', rate: 0.9915, flag: '🇶🇦' },
+    { code: 'LYD', name: 'ليبيا', symbol: 'ل.د', rate: 1.3124, flag: '🇱🇾' },
+    { code: 'EGP', name: 'مصر', symbol: 'ج.م', rate: 13.6989, flag: '🇪🇬' },
+    { code: 'IQD', name: 'العراق', symbol: 'د.ع', rate: 356.802, flag: '🇮🇶' },
+    { code: 'JOD', name: 'الأردن', symbol: 'د.أ', rate: 0.1931, flag: '🇯🇴' },
+    { code: 'DZD', name: 'الجزائر', symbol: 'د.ج', rate: 36.2000, flag: '🇩🇿' },
+    { code: 'MAD', name: 'المغرب', symbol: 'د.م.', rate: 2.7200, flag: '🇲🇦' },
+    { code: 'SDG', name: 'السودان', symbol: 'ج.س.', rate: 163.5000, flag: '🇸🇩' },
+    { code: 'TND', name: 'تونس', symbol: 'د.ت', rate: 0.8500, flag: '🇹🇳' },
+    { code: 'YER', name: 'اليمن', symbol: 'ر.ي', rate: 68.1000, flag: '🇾🇪' }
   ];
 
   selectedCurrency = signal<Currency>(this.getInitialCurrency());
@@ -58,7 +63,8 @@ export class CurrencyService {
     // Try multiple sources for reliability
     const sources = [
       { url: 'https://ipwho.is/', parser: (data: any) => data.currency?.code || data.country_code },
-      { url: 'https://ipapi.co/json/', parser: (data: any) => data.currency || data.country_code }
+      { url: 'https://ipapi.co/json/', parser: (data: any) => data.currency || data.country_code },
+      { url: 'https://ipinfo.io/json', parser: (data: any) => data.country }
     ];
 
     for (const source of sources) {
@@ -99,7 +105,8 @@ export class CurrencyService {
     const map: { [key: string]: string } = {
       'AE': 'AED', 'SA': 'SAR', 'KW': 'KWD', 'BH': 'BHD',
       'OM': 'OMR', 'QA': 'QAR', 'LY': 'LYD', 'EG': 'EGP',
-      'IQ': 'IQD', 'JO': 'JOD'
+      'IQ': 'IQD', 'JO': 'JOD', 'DZ': 'DZD', 'MA': 'MAD',
+      'SD': 'SDG', 'TN': 'TND', 'YE': 'YER'
     };
     return map[countryCode] || '';
   }
@@ -120,9 +127,9 @@ export class CurrencyService {
 
     let displayValue: string;
 
-    if (current.code === 'IQD') {
+    if (['IQD', 'YER', 'DZD', 'SDG'].includes(current.code)) {
       displayValue = Math.round(converted).toLocaleString('en-US');
-    } else if (['KWD', 'BHD', 'OMR', 'JOD'].includes(current.code)) {
+    } else if (['KWD', 'BHD', 'OMR', 'JOD', 'TND'].includes(current.code)) {
       displayValue = converted.toFixed(3);
     } else {
       displayValue = converted.toFixed(2);

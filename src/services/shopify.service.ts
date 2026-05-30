@@ -12,12 +12,16 @@ export class ShopifyService {
     private cartSubject = new BehaviorSubject<any>(null);
     private cartOpenSubject = new BehaviorSubject<boolean>(false);
     private checkoutIdSubject = new BehaviorSubject<string | null>(null);
-    private PROTECTION_VARIANT_ID = 'gid://shopify/ProductVariant/52097318813990';
+    private PROTECTION_VARIANT_ID = 'gid://shopify/ProductVariant/41116391997504';
     public getProtectionVariantId(): string {
         return this.PROTECTION_VARIANT_ID;
     }
     shippingProtection = signal(false);
     shippingProtectionCost = 0; // Will be set from product price
+
+    // Bundle discount: stored when the user adds a bundle to the cart
+    // so the cart drawer can display the discounted total instead of the raw Shopify unit price.
+    bundleDiscount = signal<{ quantity: number; totalPrice: number } | null>(null);
 
     cart$ = this.cartSubject.asObservable();
     cartOpen$ = this.cartOpenSubject.asObservable();

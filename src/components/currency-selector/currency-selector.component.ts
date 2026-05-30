@@ -28,7 +28,7 @@ import { CurrencyService } from '../../services/currency.service';
                  [class.ring-1]="currencyService.selectedCurrency().code === curr.code"
                  [class.ring-white/50]="currencyService.selectedCurrency().code === curr.code"
                >
-                 <span class="font-bold text-gray-900 text-sm md:text-base group-hover:text-primary-800 truncate ml-2">{{ curr.name }}</span>
+                 <span class="font-bold text-gray-900 text-sm md:text-base group-hover:text-black truncate ml-2">{{ curr.name }}</span>
                  <div class="flex items-center gap-3 flex-shrink-0">
                     <span class="text-[10px] md:text-xs font-bold text-gray-600 bg-white/30 px-2 py-1 rounded-lg">{{ curr.code }}</span>
                     <span class="text-xl md:text-2xl filter drop-shadow-sm">{{ curr.flag }}</span>
@@ -47,11 +47,11 @@ import { CurrencyService } from '../../services/currency.service';
         <span class="text-2xl md:text-3xl filter drop-shadow-md flex-shrink-0 transform group-hover:rotate-12 transition-transform duration-500">{{ currencyService.selectedCurrency().flag }}</span>
         <div class="flex flex-col items-start leading-tight overflow-hidden text-right flex-grow">
             <span class="font-bold text-gray-600 text-[10px] uppercase tracking-tighter mb-0.5">العملة</span>
-            <span class="font-black text-primary-950 text-sm md:text-base truncate w-full">{{ currencyService.selectedCurrency().name }}</span>
+            <span class="font-black text-black text-sm md:text-base truncate w-full">{{ currencyService.selectedCurrency().name }}</span>
         </div>
         
-        <div class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-white/30 flex items-center justify-center mr-1 md:mr-1.5 group-hover:bg-primary-600 group-hover:text-white transition-all duration-500 flex-shrink-0 shadow-sm border border-white/20">
-            <svg class="w-3.5 h-3.5 md:w-4 md:h-4 text-primary-600 group-hover:text-white transition-transform duration-500" [class.rotate-180]="isOpen()" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div class="w-8 h-8 md:w-9 md:h-9 rounded-full bg-white/30 flex items-center justify-center mr-1 md:mr-1.5 group-hover:bg-black group-hover:text-white transition-all duration-500 flex-shrink-0 shadow-sm border border-white/20">
+            <svg class="w-3.5 h-3.5 md:w-4 md:h-4 text-black group-hover:text-white transition-transform duration-500" [class.rotate-180]="isOpen()" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M19 9l-7 7-7-7" />
             </svg>
         </div>

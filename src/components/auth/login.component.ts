@@ -15,20 +15,16 @@ import { switchMap } from 'rxjs/operators';
     <div class="min-h-screen bg-gray-50 pt-32 pb-20 flex items-center justify-center px-4 font-sans" dir="rtl">
       <div class="w-full max-w-md relative z-10">
         <!-- Card -->
-        <div class="bg-white border border-gray-100 p-8 md:p-10 rounded-3xl shadow-xl relative overflow-hidden">
+        <div class="bg-white border border-gray-200 p-8 md:p-10 rounded-3xl shadow-sm relative overflow-hidden">
           
           <!-- Header -->
           <div class="text-center mb-8">
-            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary-50 text-primary-600 mb-6">
-               <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                 <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
-               </svg>
-            </div>
-            <h1 class="text-2xl font-black text-gray-900 mb-2">
+
+            <h1 class="text-2xl font-black text-black mb-2">
               {{ isRegisterMode() ? 'إنشاء حساب جديد' : 'مرحباً بك مجدداً' }}
             </h1>
             <p class="text-gray-500 text-sm font-medium">
-              {{ isRegisterMode() ? 'انضم إلى عائلة نوريفا واستمتع بمزايا حصرية' : 'سجل دخولك للوصول إلى حسابك في نوريفا' }}
+              {{ isRegisterMode() ? 'انضم إلى عائلة Kypostore واستمتع بمزايا حصرية' : 'سجل دخولك للوصول إلى حسابك في Kypostore' }}
             </p>
           </div>
 
@@ -48,7 +44,7 @@ import { switchMap } from 'rxjs/operators';
                   <input 
                     type="text" 
                     formControlName="firstName" 
-                    class="w-full bg-gray-50 border border-gray-200 rounded-xl px-5 py-3 text-gray-900 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all font-sans"
+                    class="w-full bg-gray-50 border border-gray-200 rounded-xl px-5 py-3 text-black outline-none focus:border-black focus:ring-1 focus:ring-black transition-all font-sans"
                     placeholder="الاسم الأول"
                   >
                 </div>
@@ -57,7 +53,7 @@ import { switchMap } from 'rxjs/operators';
                   <input 
                     type="text" 
                     formControlName="lastName" 
-                    class="w-full bg-gray-50 border border-gray-200 rounded-xl px-5 py-3 text-gray-900 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all font-sans"
+                    class="w-full bg-gray-50 border border-gray-200 rounded-xl px-5 py-3 text-black outline-none focus:border-black focus:ring-1 focus:ring-black transition-all font-sans"
                     placeholder="اسم العائلة"
                   >
                 </div>
@@ -69,7 +65,7 @@ import { switchMap } from 'rxjs/operators';
               <input 
                 type="email" 
                 formControlName="email" 
-                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-5 py-3 text-gray-900 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all font-sans"
+                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-5 py-3 text-black outline-none focus:border-black focus:ring-1 focus:ring-black transition-all font-sans"
                 placeholder="name@example.com"
               >
             </div>
@@ -77,25 +73,25 @@ import { switchMap } from 'rxjs/operators';
             <div class="space-y-2 text-right">
               <div class="flex items-center justify-between px-1">
                  @if (!isRegisterMode()) {
-                    <a href="#" class="text-xs font-bold text-primary-600 hover:text-primary-700 transition-colors">نسيت كلمة المرور؟</a>
+                    <a href="#" class="text-xs font-bold text-gray-600 hover:text-black transition-colors">نسيت كلمة المرور؟</a>
                  }
                  <label class="text-xs font-bold text-gray-700">كلمة المرور</label>
               </div>
               <input 
                 type="password" 
                 formControlName="password" 
-                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-5 py-3 text-gray-900 outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all font-sans"
+                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-5 py-3 text-black outline-none focus:border-black focus:ring-1 focus:ring-black transition-all font-sans"
                 placeholder="••••••••"
               >
               @if (isRegisterMode()) {
-                <p class="text-[10px] text-gray-400">يجب أن تكون كلمة المرور 6 أحرف على الأقل</p>
+                <p class="text-[10px] text-gray-500">يجب أن تكون كلمة المرور 6 أحرف على الأقل</p>
               }
             </div>
 
             <button 
               type="submit" 
               [disabled]="loginForm.invalid || loading()" 
-              class="w-full h-14 bg-gray-900 text-white font-bold text-lg rounded-xl mt-4 hover:bg-primary-600 transition-all shadow-lg active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+              class="w-full h-14 bg-black text-white font-bold text-lg rounded-xl mt-4 hover:bg-gray-800 transition-all shadow-md active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
             >
                @if (loading()) {
                  <div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -108,7 +104,7 @@ import { switchMap } from 'rxjs/operators';
           <div class="mt-8 pt-8 border-t border-gray-100 text-center">
              <p class="text-gray-500 text-sm font-medium">
                 {{ isRegisterMode() ? 'لديك حساب بالفعل؟' : 'ليس لديك حساب؟' }}
-                <button type="button" (click)="toggleMode()" class="text-primary-600 font-bold hover:text-primary-700 transition-colors ml-1">
+                <button type="button" (click)="toggleMode()" class="text-black font-bold hover:underline transition-colors ml-1">
                   {{ isRegisterMode() ? 'سجل دخولك' : 'انضم إلينا الآن' }}
                 </button>
              </p>
@@ -116,7 +112,7 @@ import { switchMap } from 'rxjs/operators';
         </div>
 
         <div class="text-center mt-8">
-           <a routerLink="/" class="inline-flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors text-sm font-bold">
+           <a routerLink="/" class="inline-flex items-center gap-2 text-gray-500 hover:text-black transition-colors text-sm font-bold">
              <svg class="w-4 h-4 rtl:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
              العودة للرئيسية
            </a>
@@ -197,7 +193,7 @@ export class LoginComponent {
       this.authService.login({
         email: customer.email,
         firstName: customer.firstName || 'عميل',
-        lastName: customer.lastName || 'نوريفا',
+        lastName: customer.lastName || 'Kypostore',
         phone: customer.phone || '',
         city: customer.defaultAddress?.city || '',
         country: customer.defaultAddress?.country || 'SA',

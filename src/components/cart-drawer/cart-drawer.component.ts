@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ShopifyService } from '../../services/shopify.service';
 import { CurrencyService } from '../../services/currency.service';
+import { TranslationService } from '../../services/translation.service';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -22,15 +23,15 @@ import { Observable } from 'rxjs';
         
         <!-- Header -->
         <div class="flex items-center justify-between p-6 border-b border-gray-100 bg-white">
-          <h2 class="text-xl font-black text-gray-900 flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <h2 class="text-xl font-black text-black flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
             </svg>
-            سلة المشتريات
+            {{ ts.t('cart') }}
           </h2>
           <button 
             (click)="closeCart()"
-            class="p-2 text-gray-400 hover:text-gray-900 transition-colors hover:bg-gray-100 rounded-full"
+            class="p-2 text-gray-400 hover:text-black transition-colors hover:bg-gray-50 rounded-full"
           >
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -42,17 +43,17 @@ import { Observable } from 'rxjs';
         <div class="flex-1 overflow-y-auto p-6 bg-gray-50/50">
           <ng-container *ngIf="(cart$ | async) as cart">
             <div *ngIf="!cart.lineItems?.length; else hasItems" class="flex flex-col items-center justify-center h-full text-gray-400 space-y-6">
-               <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-sm">
+               <div class="w-24 h-24 bg-white rounded-full flex items-center justify-center border border-gray-200">
                  <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 opacity-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
                </div>
-              <p class="text-xl font-bold text-gray-900">سلتك فارغة حالياً</p>
+              <p class="text-xl font-bold text-black">{{ ts.t('cartEmpty') }}</p>
               <button 
                 (click)="closeCart()"
-                class="px-8 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-full transition-all text-sm font-bold shadow-lg shadow-primary-500/20"
+                class="px-8 py-3 bg-black hover:bg-gray-800 text-white rounded-full transition-all text-sm font-bold shadow-md"
               >
-                اكتشف منتجاتنا
+                {{ ts.t('cartDiscover') }}
               </button>
             </div>
 
@@ -60,9 +61,9 @@ import { Observable } from 'rxjs';
               <div class="space-y-6">
                 @for (item of getFilteredItems(cart); track (item.variant?.id || item.id)) {
 
-                  <div class="flex gap-4 group bg-white p-4 rounded-2xl border border-gray-100 shadow-sm transition-all hover:shadow-md">
+                  <div class="flex gap-4 group bg-white p-4 rounded-2xl border border-gray-200 shadow-sm transition-all hover:shadow-md">
                   <!-- Image -->
-                  <div class="relative w-24 h-24 rounded-xl overflow-hidden bg-gray-50 flex-shrink-0 border border-gray-100">
+                  <div class="relative w-24 h-24 rounded-xl overflow-hidden bg-gray-50 flex-shrink-0 border border-gray-200">
                     <img 
                       *ngIf="item.variant?.image?.src"
                       [src]="item.variant.image.src" 
@@ -75,10 +76,10 @@ import { Observable } from 'rxjs';
                   <div class="flex-1 flex flex-col justify-between py-1">
                     <div>
                       <div class="flex justify-between items-start">
-                        <h3 class="text-gray-900 font-bold text-sm leading-tight line-clamp-2 ml-2">
-                          {{ item.title }}
+                        <h3 class="text-black font-bold text-sm leading-tight line-clamp-2 ml-2">
+                          {{ ts.language() === 'en' && item.title.includes('ميدالية') ? 'Kypolight™ — LED Keyboard Keychain' : item.title }}
                         </h3>
-                        <button (click)="removeItem(item)" class="text-gray-300 hover:text-red-500 transition-colors">
+                        <button (click)="removeItem(item)" class="text-gray-400 hover:text-black transition-colors">
                           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                           </svg>
@@ -92,12 +93,12 @@ import { Observable } from 'rxjs';
                     
                     <div class="flex items-center justify-between mt-3">
                       <div class="flex items-center border border-gray-200 rounded-lg h-8 bg-white overflow-hidden shadow-sm">
-                        <button (click)="updateQuantity(item, item.quantity - 1)" class="w-8 h-full flex items-center justify-center text-gray-400 hover:text-primary-600 hover:bg-gray-50 transition-colors font-bold border-r border-gray-100">-</button>
-                        <span class="w-10 text-center text-xs font-black text-gray-900">{{ item.quantity }}</span>
-                        <button (click)="updateQuantity(item, item.quantity + 1)" class="w-8 h-full flex items-center justify-center text-gray-400 hover:text-primary-600 hover:bg-gray-50 transition-colors font-bold border-l border-gray-100">+</button>
+                        <button (click)="updateQuantity(item, item.quantity - 1)" class="w-8 h-full flex items-center justify-center text-gray-500 hover:text-black hover:bg-gray-100 transition-colors font-bold border-r border-gray-200">-</button>
+                        <span class="w-10 text-center text-xs font-black text-black">{{ item.quantity }}</span>
+                        <button (click)="updateQuantity(item, item.quantity + 1)" class="w-8 h-full flex items-center justify-center text-gray-500 hover:text-black hover:bg-gray-100 transition-colors font-bold border-l border-gray-200">+</button>
                       </div>
 
-                      <p class="text-primary-600 font-black text-base whitespace-nowrap">
+                      <p class="text-black font-black text-base whitespace-nowrap">
                         {{ currencyService.formatPrice(getItemDisplayPrice(item)) }}
                       </p>
 
@@ -111,31 +112,33 @@ import { Observable } from 'rxjs';
               <div 
                 (click)="toggleProtection()"
                 class="mt-8 p-4 bg-white rounded-2xl border transition-all shadow-sm group cursor-pointer"
-                [class.border-primary-500]="shopifyService.shippingProtection()"
-                [class.bg-primary-50/30]="shopifyService.shippingProtection()"
-                [class.border-gray-100]="!shopifyService.shippingProtection()"
+                [class.border-black]="shopifyService.shippingProtection()"
+                [class.bg-gray-50]="shopifyService.shippingProtection()"
+                [class.border-gray-200]="!shopifyService.shippingProtection()"
               >
                 <div class="flex items-center justify-between">
                   <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 transition-colors duration-300"
-                         [class.bg-primary-100]="shopifyService.shippingProtection()"
-                         [class.text-primary-600]="shopifyService.shippingProtection()"
-                         [class.bg-gray-100]="!shopifyService.shippingProtection()"
+                         [class.bg-white]="shopifyService.shippingProtection()"
+                         [class.text-black]="shopifyService.shippingProtection()"
+                         [class.border-gray-200]="shopifyService.shippingProtection()"
+                         [class.border]="shopifyService.shippingProtection()"
+                         [class.bg-gray-50]="!shopifyService.shippingProtection()"
                          [class.text-gray-400]="!shopifyService.shippingProtection()">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                       </svg>
                     </div>
                     <div>
-                      <div class="font-bold text-gray-900 text-sm">حماية الشحنة</div>
-                      <div class="text-[10px] text-gray-500 font-medium">حماية ضد السرقة أو الضياع</div>
+                      <div class="font-bold text-black text-sm">{{ ts.t('shippingProtection') }}</div>
+                      <div class="text-[10px] text-gray-500 font-medium">{{ ts.t('shippingProtectionDesc') }}</div>
                     </div>
                   </div>
                   <div class="flex items-center gap-3">
-                    <span class="font-black text-gray-900 text-sm">{{ currencyService.formatPrice(shopifyService.shippingProtectionCost) }}</span>
+                    <span class="font-black text-black text-sm">{{ currencyService.formatPrice(shopifyService.shippingProtectionCost) }}</span>
                     <!-- Toggle Switch UI -->
                     <div class="w-11 h-6 rounded-full relative transition-colors duration-300 shadow-inner"
-                         [class.bg-primary-500]="shopifyService.shippingProtection()"
+                         [class.bg-black]="shopifyService.shippingProtection()"
                          [class.bg-gray-200]="!shopifyService.shippingProtection()">
                       <div class="w-4 h-4 bg-white rounded-full absolute top-1 transition-all duration-300 shadow-md" 
                            [class.left-1]="!shopifyService.shippingProtection()"
@@ -146,30 +149,30 @@ import { Observable } from 'rxjs';
               </div>
 
               <!-- Trust Message -->
-              <div class="mt-4 p-4 bg-blue-50 rounded-2xl border border-blue-100 flex items-center gap-3">
-                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 flex-shrink-0">
+              <div class="mt-4 p-4 bg-gray-100 rounded-2xl border border-gray-200 flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-gray-900 flex-shrink-0 border border-gray-200">
                   <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 </div>
-                <p class="text-[11px] text-blue-800 font-bold leading-relaxed">جميع مدفوعاتك مشفرة وآمنة تماماً. نشحن لك مباشرة من مستودعاتنا في السعودية.</p>
+                 <p class="text-[11px] text-gray-700 font-bold leading-relaxed">{{ ts.t('cartTrustMsg') }}</p>
               </div>
             </ng-template>
 
              <!-- Footer -->
             <div *ngIf="cart.lineItems?.length" class="mt-auto pt-6 border-t border-gray-100 space-y-4 bg-white p-6 -mx-6 mb-[-1.5rem] shadow-[0_-10px_20px_rgba(0,0,0,0.02)]">
-                <div class="flex items-center justify-between text-gray-900 px-1">
-                  <span class="text-gray-500 font-bold">المجموع الفرعي</span>
-                  <span class="text-2xl font-black tracking-tight text-primary-600">
+                <div class="flex items-center justify-between text-black px-1">
+                   <span class="text-gray-500 font-bold">{{ ts.t('cartSubtotal') }}</span>
+                  <span class="text-2xl font-black tracking-tight text-black">
                      {{ currencyService.formatPrice(calculateDisplayTotal(cart)) }}
                   </span>
                 </div>
                 
-                <p class="text-[10px] text-gray-400 text-center">شامل الضريبة والشحن سيحسب عند الدفع</p>
+                 <p class="text-[10px] text-gray-400 text-center">{{ ts.t('cartTax') }}</p>
 
                 <button 
                 (click)="redirectToCheckout()"
-                class="w-full flex items-center justify-center gap-3 py-5 bg-gray-900 text-white font-black text-lg tracking-wide rounded-full hover:bg-primary-600 transition-all shadow-xl shadow-gray-200 active:scale-[0.98] transform duration-200"
+                class="w-full flex items-center justify-center gap-3 py-5 bg-black text-white font-black text-lg tracking-wide rounded-full hover:bg-gray-800 transition-all shadow-md active:scale-[0.98] transform duration-200"
                 >
-                  <span>إتمام الطلب بأمان</span>
+                   <span>{{ ts.t('cartCheckout') }}</span>
                   <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                 </button>
             </div>
@@ -186,6 +189,7 @@ export class CartDrawerComponent implements OnInit {
 
   currencyService = inject(CurrencyService);
   shopifyService = inject(ShopifyService);
+  ts = inject(TranslationService);
 
   constructor() {
     this.cart$ = this.shopifyService.cart$;
@@ -204,7 +208,19 @@ export class CartDrawerComponent implements OnInit {
 
   getItemDisplayPrice(item: any): number {
     const basePrice = this.parseFloat(item.variant?.price?.amount || item.variant?.price || 0);
-    return basePrice * item.quantity;
+    const rawTotal = basePrice * item.quantity;
+
+    // If there is an active bundle discount, apply it proportionally
+    const bundle = this.shopifyService.bundleDiscount();
+    if (bundle && bundle.quantity > 0) {
+      const rawBundleTotal = basePrice * bundle.quantity;
+      if (rawBundleTotal > 0) {
+        const discountRatio = bundle.totalPrice / rawBundleTotal;
+        return rawTotal * discountRatio;
+      }
+    }
+
+    return rawTotal;
   }
 
 
